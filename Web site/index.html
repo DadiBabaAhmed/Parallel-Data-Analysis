@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet d'Analyse de Données Parallèle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.birds.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .code-font { font-family: 'JetBrains Mono', monospace; }
+        .hero-bg { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .gradient-text { background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="text-xl font-bold gradient-text">DataParallèle</h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#accueil" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Accueil</a>
+                        <a href="./algorithmes.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Algorithmes</a>
+                        <a href="./performances.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Performances</a>
+                        <a href="./documentation.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Documentation</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="accueil" class="hero-bg pt-16 pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center py-16">
+                <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+                    Analyse de Données <span class="gradient-text">Parallèle</span>
+                </h1>
+                <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                    Développement d'algorithmes parallèles pour le traitement de données massives avec Apache Spark et MPI. 
+                    Optimisation des performances et évaluation sur des systèmes distribués.
+                </p>
+                <div class="flex justify-center space-x-4">
+                    <button onclick="scrollToSection('algorithmes')" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                        Explorer les Algorithmes
+                    </button>
+                    <button onclick="scrollToSection('performances')" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                        Explorer les Performance
+                    </button>
+                    <button onclick="scrollToSection('demo')" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold border border-blue-600 hover:bg-blue-50 transition-colors">
+                        Voir la Démo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Algorithmes Section -->
+    <section id="algorithmes" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Algorithmes Parallèles</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Frameworks et techniques de parallélisation pour le traitement efficace des données massives
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-16">
+                <!-- Apache Spark -->
+                <div class="card-hover bg-white rounded-xl shadow-lg p-8 border border-gray-100">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mr-4">
+                            <svg class="w-6 h-6 text-orange-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900">Apache Spark</h3>
+                    </div>
+                    <p class="text-gray-600 mb-6">
+                        Framework de calcul distribué pour le traitement de données massives avec RDD et DataFrames.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="flex items-center text-sm text-gray-600">
+                            <span class="w-2 h-2 bg-green-400 rounded-full mr-3"></span>
+                            <span>Calcul distribué en mémoire</span>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-600">
+                            <span class="w-2 h-2 bg-green-400 rounded-full mr-3"></span>
+                            <span>Optimisation DAG automatique</span>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-600">
+                            <span class="w-2 h-2 bg-green-400 rounded-full mr-3"></span>
+                            <span>Tolérance aux pannes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MPI -->
+                <div class="card-hover bg-white rounded-xl shadow-lg p-8 border border-gray-100">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                            <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M4 4h16v2H4V4zm0 4h16v2H4V8zm0 4h16v2H4v-2zm0 4h16v2H4v-2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900">MPI</h3>
+                    </div>
+                    <p class="text-gray-600 mb-6">
+                        Interface de passage de messages pour la programmation parallèle sur architectures distribuées.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="flex items-center text-sm text-gray-600">
+                            <span class="w-2 h-2 bg-purple-400 rounded-full mr-3"></span>
+                            <span>Communication point-à-point</span>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-600">
+                            <span class="w-2 h-2 bg-purple-400 rounded-full mr-3"></span>
+                            <span>Opérations collectives</span>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-600">
+                            <span class="w-2 h-2 bg-purple-400 rounded-full mr-3"></span>
+                            <span>Portable et standardisé</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Techniques de Parallélisation -->
+            <div class="bg-gray-50 rounded-xl p-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Techniques de Parallélisation</h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-2">MapReduce</h4>
+                        <p class="text-gray-600 text-sm">Paradigme de traitement distribué avec phases de mapping et de réduction</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-2">Partitionnement</h4>
+                        <p class="text-gray-600 text-sm">Division des données en partitions pour traitement parallèle équilibré</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-2">Pipeline</h4>
+                        <p class="text-gray-600 text-sm">Exécution en chaîne des opérations avec traitement parallèle des étapes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Performances Section -->
+    <section id="performances" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Évaluation des Performances</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Analyse comparative des performances et métriques d'optimisation
+                </p>
+            </div>
+
+            <!-- Graphiques de Performance -->
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Comparaison Frameworks</h3>
+                    <canvas id="frameworkChart" width="400" height="300"></canvas>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Scalabilité</h3>
+                    <canvas id="scalabilityChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+
+            <!-- Facteurs de Performance -->
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">Facteurs de Performance</h3>
+                <div class="grid md:grid-cols-4 gap-6">
+                    <div class="text-center p-4 bg-red-50 rounded-lg">
+                        <div class="text-2xl font-bold text-red-600 mb-2">78%</div>
+                        <div class="text-sm text-gray-600">Réduction temps calcul</div>
+                    </div>
+                    <div class="text-center p-4 bg-green-50 rounded-lg">
+                        <div class="text-2xl font-bold text-green-600 mb-2">3.2x</div>
+                        <div class="text-sm text-gray-600">Accélération moyenne</div>
+                    </div>
+                    <div class="text-center p-4 bg-blue-50 rounded-lg">
+                        <div class="text-2xl font-bold text-blue-600 mb-2">95%</div>
+                        <div class="text-sm text-gray-600">Efficacité mémoire</div>
+                    </div>
+                    <div class="text-center p-4 bg-purple-50 rounded-lg">
+                        <div class="text-2xl font-bold text-purple-600 mb-2">12</div>
+                        <div class="text-sm text-gray-600">Nœuds maximum</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Démonstration Section -->
+    <section id="demo" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Démonstration Interactive</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Expérimentez avec les algorithmes parallèles en temps réel
+                </p>
+            </div>
+
+            <!-- Contrôles de Simulation -->
+            <div class="bg-gray-50 rounded-xl p-8 mb-8">
+                <h3 class="text-xl font-semibold text-gray-900 mb-6">Paramètres de Simulation</h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Taille des données (GB)</label>
+                        <input type="range" id="dataSize" min="1" max="100" value="10" class="w-full" onchange="updateSimulation()">
+                        <span id="dataSizeValue" class="text-sm text-gray-600">10 GB</span>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nombre de nœuds</label>
+                        <input type="range" id="nodes" min="1" max="20" value="4" class="w-full" onchange="updateSimulation()">
+                        <span id="nodesValue" class="text-sm text-gray-600">4 nœuds</span>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Type d'algorithme</label>
+                        <select id="algorithm" class="w-full p-2 border border-gray-300 rounded-lg" onchange="updateSimulation()">
+                            <option value="mapreduce">MapReduce</option>
+                            <option value="spark">Apache Spark</option>
+                            <option value="mpi">MPI</option>
+                        </select>
+                    </div>
+                </div>
+                <button onclick="runSimulation()" class="mt-6 bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                    Lancer la Simulation
+                </button>
+            </div>
+
+            <!-- Résultats de Simulation -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Progression du Traitement</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-sm text-gray-600 mb-1">
+                                <span>Map Phase</span>
+                                <span id="mapProgress">0%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div id="mapBar" class="bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm text-gray-600 mb-1">
+                                <span>Reduce Phase</span>
+                                <span id="reduceProgress">0%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div id="reduceBar" class="bg-green-600 h-2 rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                        <div class="text-2xl font-bold text-gray-900" id="executionTime">--</div>
+                        <div class="text-sm text-gray-600">Temps d'exécution estimé</div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Statistiques</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Données traitées</span>
+                            <span id="processedData" class="font-semibold">--</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Taux de traitement</span>
+                            <span id="processingRate" class="font-semibold">--</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Efficacité parallèle</span>
+                            <span id="parallelEfficiency" class="font-semibold">--</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Charge CPU moyenne</span>
+                            <span id="cpuLoad" class="font-semibold">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h3 class="text-2xl font-bold gradient-text mb-4">DataParallèle</h3>
+                <p class="text-gray-400 mb-4">Projet d'analyse de données parallèle - Optimisation des performances pour le Big Data</p>
+                <p class="text-sm text-gray-500">© 2024 Projet DataParallèle. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

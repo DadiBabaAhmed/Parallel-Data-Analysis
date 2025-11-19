@@ -1,0 +1,103 @@
+# Application Configuration
+
+application:
+  name: "Parallel Data Analysis Framework"
+  version: "1.0.0"
+  environment: "production"
+
+# Data settings
+data:
+  input_dir: "data/input"
+  output_dir: "output"
+  supported_formats:
+    - csv
+    - json
+    - parquet
+    - avro
+  max_file_size_mb: 5000
+
+# Analysis settings
+analysis:
+  default_type: "full"
+  enable_caching: true
+  parallelism_level: "auto"
+  
+  statistical:
+    enabled: true
+    include_percentiles: true
+    percentiles: [0.25, 0.5, 0.75, 0.95, 0.99]
+  
+  aggregation:
+    enabled: true
+    default_operations: ["sum", "avg", "min", "max", "count"]
+  
+  correlation:
+    enabled: true
+    method: "pearson"
+    threshold: 0.7
+
+# Visualization settings
+visualization:
+  enabled: true
+  output_format: "png"
+  dpi: 300
+  style: "whitegrid"
+  color_palette: "husl"
+  
+  graph_types:
+    - distributions
+    - correlations
+    - aggregations
+    - time_series
+
+# Performance monitoring
+monitoring:
+  enabled: true
+  collect_system_metrics: true
+  collect_spark_metrics: true
+  metrics_interval_seconds: 60
+  
+  alerts:
+    memory_threshold_percent: 90
+    cpu_threshold_percent: 95
+    disk_threshold_percent: 85
+
+# Error handling
+error_handling:
+  max_retries: 3
+  retry_delay_seconds: 5
+  log_level: "INFO"
+  save_failed_tasks: true
+  enable_recovery: true
+
+# Output settings
+output:
+  create_timestamp_dirs: true
+  compress_results: false
+  save_intermediate_results: false
+  
+  general:
+    save_csv: true
+    save_json: true
+    save_parquet: false
+  
+  statistics:
+    save_json: true
+    save_csv: true
+    save_text_summary: true
+  
+  failures:
+    save_error_log: true
+    save_failed_tasks: true
+    save_recovery_log: true
+
+# Docker/Cluster settings
+cluster:
+  mode: "cluster"  # or "local"
+  master_url: "spark://spark-master:7077"
+  worker_nodes: 3
+  
+  resources:
+    executor_memory: "2g"
+    executor_cores: 2
+    driver_memory: "2g"

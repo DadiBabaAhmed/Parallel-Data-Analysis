@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithmes Parallèles - DataParallèle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .code-font { font-family: 'JetBrains Mono', monospace; }
+        .gradient-text { background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .code-block { background: #1f2937; color: #f9fafb; border-radius: 8px; padding: 1rem; overflow-x: auto; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-xl font-bold gradient-text">DataParallèle</a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="index.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Accueil</a>
+                        <a href="algorithmes.html" class="text-blue-600 px-3 py-2 text-sm font-medium">Algorithmes</a>
+                        <a href="performances.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Performances</a>
+                        <a href="documentation.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Documentation</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-blue-50 to-purple-50 pt-16 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center py-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                    Algorithmes <span class="gradient-text">Parallèles</span>
+                </h1>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Implémentations détaillées des algorithmes de traitement de données parallèles
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Algorithmes Section -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- MapReduce -->
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8">MapReduce</h2>
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Description</h3>
+                            <p class="text-gray-600 mb-4">
+                                Le paradigme MapReduce divise le traitement en deux phases principales : 
+                                <strong>Map</strong> qui transforme les données et <strong>Reduce</strong> qui agrège les résultats.
+                            </p>
+                            <div class="space-y-2">
+                                <div class="flex items-center text-sm">
+                                    <span class="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>
+                                    <span>Traitement distribué sur des clusters</span>
+                                </div>
+                                <div class="flex items-center text-sm">
+                                    <span class="w-2 h-2 bg-green-400 rounded-full mr-3"></span>
+                                    <span>Tolérance aux pannes automatique</span>
+                                </div>
+                                <div class="flex items-center text-sm">
+                                    <span class="w-2 h-2 bg-purple-400 rounded-full mr-3"></span>
+                                    <span>Équilibrage de charge dynamique</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Complexité</h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Temps (Map)</span>
+                                    <span class="code-font">O(n/p)</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Temps (Reduce)</span>
+                                    <span class="code-font">O(k/p)</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Communication</span>
+                                    <span class="code-font">O(k)</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Mémoire</span>
+                                    <span class="code-font">O(n/p)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4">Implémentation Python</h3>
+                        <div class="code-block">
+                            <pre><code>from multiprocessing import Pool
+import collections
+
+def map_function(data_chunk):
+    """Phase Map: transforme les données en paires (clé, valeur)"""
+    result = []
+    for item in data_chunk:
+        # Exemple: comptage de mots
+        words = item.split()
+        for word in words:
+            result.append((word.lower(), 1))
+    return result
+
+def reduce_function(mapped_data):
+    """Phase Reduce: agrège les résultats par clé"""
+    result = collections.defaultdict(int)
+    for key, value in mapped_data:
+        result[key] += value
+    return dict(result)
+
+def map_reduce(data, num_workers=4):
+    """Exécution du framework MapReduce"""
+    # Division des données
+    chunk_size = len(data) // num_workers
+    chunks = [data[i:i+chunk_size] for i in range(0, len(data), chunk_size)]
+    
+    # Phase Map (parallèle)
+    with Pool(num_workers) as pool:
+        mapped_results = pool.map(map_function, chunks)
+    
+    # Regroupement par clé
+    shuffled = collections.defaultdict(list)
+    for chunk_result in mapped_results:
+        for key, value in chunk_result:
+            shuffled[key].append(value)
+    
+    # Phase Reduce (parallèle)
+    with Pool(num_workers) as pool:
+        reduced_results = pool.map(
+            lambda kv: (kv[0], sum(kv[1])), 
+            shuffled.items()
+        )
+    
+    return dict(reduced_results)</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Apache Spark -->
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8">Apache Spark</h2>
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">RDD et DataFrames</h3>
+                            <p class="text-gray-600 mb-4">
+                                Spark utilise des <strong>RDD (Resilient Distributed Datasets)</strong> pour le traitement 
+                                distribué en mémoire avec tolérance aux pannes.
+                            </p>
+                            <div class="space-y-2">
+                                <div class="flex items-center text-sm">
+                                    <span class="w-2 h-2 bg-orange-400 rounded-full mr-3"></span>
+                                    <span>Calcul en mémoire (10x plus rapide)</span>
+                                </div>
+                                <div class="flex items-center text-sm">
+                                    <span class="w-2 h-2 bg-red-400 rounded-full mr-3"></span>
+                                    <span>Optimisation DAG automatique</span>
+                                </div>
+                                <div class="flex items-center text-sm">
+                                    <span class="w-2 h-2 bg-yellow-400 rounded-full mr-3"></span>
+                                    <span>API SQL avancée</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Optimisations</h3>
+                            <div class="space-y-3">
+                                <div class="bg-blue-50 p-3 rounded-lg">
+                                    <div class="text-sm font-medium text-blue-900">Lazy Evaluation</div>
+                                    <div class="text-xs text-blue-700">Construction du DAG avant exécution</div>
+                                </div>
+                                <div class="bg-green-50 p-3 rounded-lg">
+                                    <div class="text-sm font-medium text-green-900">Caching</div>
+                                    <div class="text-xs text-green-700">Stockage en mémoire des RDD réutilisés</div>
+                                </div>
+                                <div class="bg-purple-50 p-3 rounded-lg">
+                                    <div class="text-sm font-medium text-purple-900">Partitionnement</div>
+                                    <div class="text-xs text-purple-700">Optimisation du shuffling de données</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4">Exemple PySpark</h3>
+                        <div class="code-block">
+                            <pre><code>from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, count, desc
+
+# Création de la session Spark
+spark = SparkSession.builder \
+    .appName("AnalyseDonneesParallele") \
+    .config("spark.sql.adaptive.enabled", "true") \
+    .config("spark.sql.adaptive.coalescePartitions.enabled", "true") \
+    .getOrCreate()
+
+def process_large_dataset(file_path):
+    """Traitement de données massives avec Spark"""
+    
+    # Lecture des données
+    df = spark.read.parquet(file_path) \
+        .repartition(200) \
+        .cache()  # Mise en cache pour réutilisation
+    
+    # Transformation avec optimisations
+    result = df.filter(col("valeur") > 100) \
+        .groupBy("categorie") \
+        .agg(count("*").alias("nombre")) \
+        .orderBy(desc("nombre"))
+    
+    # Exécution avec monitoring
+    result.explain(True)  # Plan d'exécution
+    return result
+
+def iterative_algorithm(data):
+    """Algorithme itératif optimisé pour Spark"""
+    
+    # Initialisation
+    current_data = data
+    convergence_threshold = 0.001
+    max_iterations = 100
+    
+    for iteration in range(max_iterations):
+        # Étape de calcul parallèle
+        new_data = current_data.rdd \
+            .map(compute_transformation) \
+            .reduceByKey(lambda a, b: a + b) \
+            .toDF(["cle", "valeur"])
+        
+        # Vérification de la convergence
+        diff = compute_difference(current_data, new_data)
+        if diff < convergence_threshold:
+            break
+        
+        current_data = new_data.cache()
+        
+        # Monitoring
+        print(f"Itération {iteration}: différence = {diff}")
+    
+    return current_data
+
+def compute_transformation(row):
+    """Fonction de transformation pour le mapping"""
+    cle = row.cle
+    valeur = row.valeur
+    # Logique de transformation
+    return (cle, valeur * 2 + 1)
+
+# Exécution
+df = process_large_dataset("hdfs://data/mes_donnees.parquet")
+resultat = iterative_algorithm(df)
+resultat.show()
+
+spark.stop()</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MPI -->
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8">MPI (Message Passing Interface)</h2>
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Communication Parallèle</h3>
+                            <p class="text-gray-600 mb-4">
+                                MPI fournit un modèle standardisé pour la communication entre processus 
+                                dans des environnements distribués avec mémoire distribuée.
+                            </p>
+                            <div class="space-y-2">
+                                <div class="flex items-center text-sm">
+                                    <span class="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>
+                                    <span>Communication point-à-point</span>
+                                </div>
+                                <div class="flex items-center text-sm">
+                                    <span class="w-2 h-2 bg-green-400 rounded-full mr-3"></span>
+                                    <span>Opérations collectives (broadcast, reduce)</span>
+                                </div>
+                                <div class="flex items-center text-sm">
+                                    <span class="w-2 h-2 bg-purple-400 rounded-full mr-3"></span>
+                                    <span>Barrières de synchronisation</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Avantages</h3>
+                            <div class="space-y-3">
+                                <div class="bg-blue-50 p-3 rounded-lg">
+                                    <div class="text-sm font-medium text-blue-900">Portable</div>
+                                    <div class="text-xs text-blue-700">Standard ouvert supporté par tous les HPC</div>
+                                </div>
+                                <div class="bg-green-50 p-3 rounded-lg">
+                                    <div class="text-sm font-medium text-green-900">Performant</div>
+                                    <div class="text-xs text-green-700">Faible latence, haut débit</div>
+                                </div>
+                                <div class="bg-purple-50 p-3 rounded-lg">
+                                    <div class="text-sm font-medium text-purple-900">Évolutif</div>
+                                    <div class="text-xs text-purple-700">Supporte des milliers de cœurs</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4">Exemple MPI</h3>
+                        <div class="code-block">
+                            <pre><code>from mpi4py import MPI
+import numpy as np
+import time
+
+def parallel_data_processing():
+    """Traitement de données avec MPI"""
+    
+    comm = MPI.COMM_WORLD
+    rank = comm.Get_rank()
+    size = comm.Get_size()
+    
+    # Données distribuées
+    total_data_size = 1000000
+    local_size = total_data_size // size
+    
+    if rank == 0:
+        # Processus maître
+        print(f"Traitement de {total_data_size} éléments sur {size} processus")
+        
+        # Distribution des données
+        data = np.random.random(total_data_size)
+        chunks = np.array_split(data, size)
+    else:
+        chunks = None
+    
+    # Scatter des données
+    local_data = comm.scatter(chunks, root=0)
+    
+    # Traitement local
+    start_time = time.time()
+    local_result = process_chunk(local_data)
+    processing_time = time.time() - start_time
+    
+    # Gather des résultats
+    all_results = comm.gather(local_result, root=0)
+    all_times = comm.gather(processing_time, root=0)
+    
+    if rank == 0:
+        # Combinaison des résultats
+        final_result = combine_results(all_results)
+        
+        # Statistiques de performance
+        total_time = max(all_times)
+        efficiency = calculate_efficiency(processing_time, total_time, size)
+        
+        print(f"Temps total: {total_time:.2f}s")
+        print(f"Efficacité: {efficiency:.2%}")
+        print(f"Résultat final: {final_result}")
+    
+    return final_result if rank == 0 else None
+
+def process_chunk(data_chunk):
+    """Traitement d'un chunk de données"""
+    # Exemple: calcul de la moyenne et de la variance
+    mean = np.mean(data_chunk)
+    variance = np.var(data_chunk)
+    
+    # Simulation d'un traitement complexe
+    result = np.sum(np.sin(data_chunk) ** 2)
+    
+    return {
+        'mean': mean,
+        'variance': variance,
+        'processed_sum': result,
+        'chunk_size': len(data_chunk)
+    }
+
+def combine_results(results):
+    """Combinaison des résultats de tous les processus"""
+    total_sum = sum(r['processed_sum'] for r in results)
+    total_size = sum(r['chunk_size'] for r in results)
+    weighted_mean = sum(r['mean'] * r['chunk_size'] for r in results) / total_size
+    
+    return {
+        'global_mean': weighted_mean,
+        'total_processed': total_sum,
+        'total_elements': total_size
+    }
+
+def calculate_efficiency(local_time, total_time, num_processes):
+    """Calcul de l'efficacité parallèle"""
+    ideal_time = local_time
+    return ideal_time / (total_time * num_processes)
+
+# Algorithme de réduction parallèle avec MPI
+def parallel_reduction(data, operation='sum'):
+    """Opération de réduction parallèle"""
+    comm = MPI.COMM_WORLD
+    rank = comm.Get_rank()
+    size = comm.Get_size()
+    
+    # Distribution des données
+    local_data = None
+    if rank == 0:
+        chunks = np.array_split(data, size)
+    else:
+        chunks = None
+    
+    local_chunk = comm.scatter(chunks, root=0)
+    
+    # Calcul local
+    if operation == 'sum':
+        local_result = np.sum(local_chunk)
+        mpi_op = MPI.SUM
+    elif operation == 'max':
+        local_result = np.max(local_chunk)
+        mpi_op = MPI.MAX
+    elif operation == 'min':
+        local_result = np.min(local_chunk)
+        mpi_op = MPI.MIN
+    
+    # Réduction globale
+    global_result = comm.reduce(local_result, op=mpi_op, root=0)
+    
+    return global_result
+
+if __name__ == "__main__":
+    # Exécution principale
+    result = parallel_data_processing()
+    
+    # Test de réduction
+    if MPI.COMM_WORLD.Get_rank() == 0:
+        test_data = np.random.random(1000)
+        global_sum = parallel_reduction(test_data, 'sum')
+        if global_sum is not None:
+            print(f"Somme globale: {global_sum}")
+            print(f"Vérification: {np.sum(test_data)}")</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h3 class="text-2xl font-bold gradient-text mb-4">DataParallèle</h3>
+                <p class="text-gray-400 mb-4">Projet d'analyse de données parallèle - Algorithmes et implémentations</p>
+                <p class="text-sm text-gray-500">© 2024 Projet DataParallèle. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

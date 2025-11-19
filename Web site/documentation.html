@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation Technique - DataParallèle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .code-font { font-family: 'JetBrains Mono', monospace; }
+        .gradient-text { background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .code-block { background: #1f2937; color: #f9fafb; border-radius: 8px; padding: 1rem; overflow-x: auto; }
+        .doc-section { scroll-margin-top: 80px; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-xl font-bold gradient-text">DataParallèle</a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="index.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Accueil</a>
+                        <a href="algorithmes.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Algorithmes</a>
+                        <a href="performances.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Performances</a>
+                        <a href="documentation.html" class="text-blue-600 px-3 py-2 text-sm font-medium">Documentation</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-purple-50 to-blue-50 pt-16 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center py-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                    Documentation <span class="gradient-text">Technique</span>
+                </h1>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Guide complet d'installation, configuration et utilisation des frameworks de calcul parallèle
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Table des Matières -->
+    <section class="py-8 bg-white border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-center space-x-8 text-sm">
+                <a href="#installation" class="text-blue-600 hover:text-blue-800 font-medium">Installation</a>
+                <a href="#configuration" class="text-blue-600 hover:text-blue-800 font-medium">Configuration</a>
+                <a href="#utilisation" class="text-blue-600 hover:text-blue-800 font-medium">Utilisation</a>
+                <a href="#api" class="text-blue-600 hover:text-blue-800 font-medium">API Référence</a>
+                <a href="#exemples" class="text-blue-600 hover:text-blue-800 font-medium">Exemples</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Documentation Principale -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-4 gap-8">
+                <!-- Menu Latéral -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-xl shadow-lg p-6 sticky top-24">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Navigation</h3>
+                        <nav class="space-y-2">
+                            <a href="#installation" class="block text-sm text-gray-600 hover:text-blue-600 py-1">Installation</a>
+                            <a href="#configuration" class="block text-sm text-gray-600 hover:text-blue-600 py-1">Configuration</a>
+                            <a href="#utilisation" class="block text-sm text-gray-600 hover:text-blue-600 py-1">Utilisation</a>
+                            <a href="#api" class="block text-sm text-gray-600 hover:text-blue-600 py-1">API Référence</a>
+                            <a href="#exemples" class="block text-sm text-gray-600 hover:text-blue-600 py-1">Exemples</a>
+                            <a href="#depannage" class="block text-sm text-gray-600 hover:text-blue-600 py-1">Dépannage</a>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Contenu Principal -->
+                <div class="lg:col-span-3 space-y-16">
+                    <!-- Installation -->
+                    <section id="installation" class="doc-section">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-8">Installation</h2>
+                        
+                        <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Prérequis</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-center">
+                                    <span class="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>
+                                    <span>Python 3.7+</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-2 h-2 bg-green-400 rounded-full mr-3"></span>
+                                    <span>Java 8+ (pour Spark)</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-2 h-2 bg-purple-400 rounded-full mr-3"></span>
+                                    <span>MPI Library (OpenMPI ou MPICH)</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-2 h-2 bg-orange-400 rounded-full mr-3"></span>
+                                    <span>4GB+ RAM recommandé</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Installation avec pip</h3>
+                                <div class="code-block">
+                                    <pre><code># Installation des dépendances principales
+pip install pyspark mpi4py numpy pandas matplotlib plotly
+
+# Installation pour le développement
+pip install jupyter notebook black flake8 pytest
+
+# Installation depuis les sources
+git clone https://github.com/votre-projet/dataparallele.git
+cd dataparallele
+pip install -e .</code></pre>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Installation avec conda</h3>
+                                <div class="code-block">
+                                    <pre><code># Création de l'environnement conda
+conda create -n dataparallel python=3.9
+conda activate dataparallel
+
+# Installation des packages
+conda install pyspark mpi4py numpy pandas matplotlib
+conda install -c conda-forge plotly</code></pre>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Installation de MPI</h3>
+                                <div class="code-block">
+                                    <pre><code># Sur Ubuntu/Debian
+sudo apt-get update
+sudo apt-get install openmpi-bin openmpi-common libopenmpi-dev
+
+# Sur macOS avec Homebrew
+brew install open-mpi
+
+# Sur CentOS/RHEL
+sudo yum install openmpi openmpi-devel</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Configuration -->
+                    <section id="configuration" class="doc-section">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-8">Configuration</h2>
+                        
+                        <div class="space-y-8">
+                            <div class="bg-white rounded-xl shadow-lg p-8">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Configuration Spark</h3>
+                                <div class="code-block">
+                                    <pre><code># spark-defaults.conf
+spark.master                     yarn
+spark.submit.deployMode         cluster
+spark.driver.memory             4g
+spark.executor.memory           8g
+spark.executor.cores            4
+spark.executor.instances        10
+spark.sql.adaptive.enabled      true
+spark.sql.adaptive.coalescePartitions.enabled true
+spark.serializer                org.apache.spark.serializer.KryoSerializer</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-xl shadow-lg p-8">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Configuration MPI</h3>
+                                <div class="code-block">
+                                    <pre><code># Configuration de l'environnement MPI
+export MPI_HOME=/usr/local/openmpi
+export PATH=$MPI_HOME/bin:$PATH
+export LD_LIBRARY_PATH=$MPI_HOME/lib:$LD_LIBRARY_PATH
+export MPIEXEC_TIMEOUT=3600
+
+# Fichier hostfile pour MPI
+# hosts.txt
+node1 slots=4
+node2 slots=4
+node3 slots=4
+node4 slots=4</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-xl shadow-lg p-8">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Fichier de Configuration Python</h3>
+                                <div class="code-block">
+                                    <pre><code># config.py
+import os
+
+class Config:
+    # Configuration Spark
+    SPARK_MASTER = os.getenv('SPARK_MASTER', 'local[*]')
+    SPARK_APP_NAME = 'DataParallelAnalysis'
+    SPARK_DRIVER_MEMORY = '4g'
+    SPARK_EXECUTOR_MEMORY = '8g'
+    
+    # Configuration MPI
+    MPI_TIMEOUT = 3600
+    MPI_PROCESSES = 4
+    
+    # Configuration générale
+    DATA_DIR = './data'
+    RESULTS_DIR = './results'
+    LOG_LEVEL = 'INFO'
+    
+    # Paramètres de performance
+    CHUNK_SIZE = 10000
+    PARALLEL_WORKERS = 4
+    CACHE_SIZE = '1g'</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Utilisation -->
+                    <section id="utilisation" class="doc-section">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-8">Utilisation</h2>
+                        
+                        <div class="space-y-8">
+                            <div class="bg-white rounded-xl shadow-lg p-8">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Démarrage rapide</h3>
+                                <div class="code-block">
+                                    <pre><code># Import des modules
+from dataparallel import SparkProcessor, MPIProcessor
+from dataparallel.algorithms import MapReduce, DataAggregator
+
+# Initialisation du processeur Spark
+spark_processor = SparkProcessor(
+    app_name="MonAnalyse",
+    master="local[*]",
+    memory="4g"
+)
+
+# Initialisation du processeur MPI
+mpi_processor = MPIProcessor(
+    num_processes=4,
+    hostfile="hosts.txt"
+)
+
+# Chargement des données
+data = spark_processor.load_data("data/mes_donnees.csv")
+
+# Application d'un algorithme MapReduce
+map_reduce = MapReduce(
+    map_func=ma_fonction_map,
+    reduce_func=ma_fonction_reduce
+)
+
+result = map_reduce.execute(data)
+result.save("results/output")</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-xl shadow-lg p-8">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Interface CLI</h3>
+                                <div class="code-block">
+                                    <pre><code># Installation de l'interface CLI
+pip install dataparallel-cli
+
+# Utilisation de la CLI
+dataparallel --help
+dataparallel process --input data.csv --output results/ --algorithm mapreduce
+dataparallel benchmark --framework spark --dataset large_dataset.parquet
+dataparallel monitor --job-id 12345 --real-time</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- API Référence -->
+                    <section id="api" class="doc-section">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-8">API Référence</h2>
+                        
+                        <div class="space-y-8">
+                            <div class="bg-white rounded-xl shadow-lg p-8">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Classe SparkProcessor</h3>
+                                <div class="code-block">
+                                    <pre><code>class SparkProcessor:
+    """
+    Processeur de données distribué basé sur Apache Spark.
+    
+    Attributes:
+        spark_session: Session Spark active
+        config: Configuration du processeur
+    """
+    
+    def __init__(self, app_name, master="local[*]", memory="4g", **kwargs):
+        """
+        Initialise un processeur Spark.
+        
+        Args:
+            app_name (str): Nom de l'application
+            master (str): URL du master Spark
+            memory (str): Mémoire allouée
+            **kwargs: Paramètres additionnels
+        """
+        pass
+    
+    def load_data(self, path, format="csv", **options):
+        """
+        Charge des données depuis différentes sources.
+        
+        Args:
+            path (str): Chemin vers les données
+            format (str): Format des données (csv, parquet, json)
+            **options: Options de lecture
+            
+        Returns:
+            DataFrame: Données chargées
+        """
+        pass
+    
+    def execute_query(self, query):
+        """
+        Exécute une requête SQL sur les données.
+        
+        Args:
+            query (str): Requête SQL
+            
+        Returns:
+            DataFrame: Résultats de la requête
+        """
+        pass</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-xl shadow-lg p-8">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Classe MapReduce</h3>
+                                <div class="code-block">
+                                    <pre><code>class MapReduce:
+    """
+    Implémentation du paradigme MapReduce.
+    
+    Attributes:
+        map_func: Fonction de mapping
+        reduce_func: Fonction de réduction
+        combiner_func: Fonction combinatrice (optionnelle)
+    """
+    
+    def __init__(self, map_func, reduce_func, combiner_func=None):
+        """
+        Initialise l'algorithme MapReduce.
+        
+        Args:
+            map_func: Fonction map (data_chunk -> list(key, value))
+            reduce_func: Fonction reduce (key, values -> result)
+            combiner_func: Fonction combiner optionnelle
+        """
+        pass
+    
+    def execute(self, data, num_workers=4):
+        """
+        Exécute l'algorithme MapReduce sur les données.
+        
+        Args:
+            data: Données d'entrée
+            num_workers: Nombre de workers parallèles
+            
+        Returns:
+            dict: Résultats agrégés
+        """
+        pass</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-xl shadow-lg p-8">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Classe DataAggregator</h3>
+                                <div class="code-block">
+                                    <pre><code>class DataAggregator:
+    """
+    Outils d'agrégation de données parallèles.
+    """
+    
+    @staticmethod
+    def parallel_sum(data, num_workers=4):
+        """Calcule la somme parallèle des données."""
+        pass
+    
+    @staticmethod
+    def parallel_mean(data, num_workers=4):
+        """Calcule la moyenne parallèle des données."""
+        pass
+    
+    @staticmethod
+    def parallel_groupby(data, key_func, agg_func, num_workers=4):
+        """
+        Effectue un groupby parallèle.
+        
+        Args:
+            data: Données d'entrée
+            key_func: Fonction d'extraction de clé
+            agg_func: Fonction d'agrégation
+            num_workers: Nombre de workers
+        """
+        pass</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Exemples -->
+                    <section id="exemples" class="doc-section">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-8">Exemples</h2>
+                        
+                        <div class="space-y-8">
+                            <div class="bg-white rounded-xl shadow-lg p-8">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Analyse de Logs Web</h3>
+                                <div class="code-block">
+                                    <pre><code>import re
+from collections import defaultdict
+from dataparallel import SparkProcessor
+
+def analyze_web_logs():
+    """Analyse parallèle de logs web."""
+    
+    # Initialisation Spark
+    spark = SparkProcessor("WebLogAnalysis")
+    
+    # Chargement des logs
+    logs = spark.load_data("logs/access.log", format="text")
+    
+    # Extraction des informations
+    def extract_info(line):
+        # Expression régulière pour les logs Apache
+        pattern = r'(\d+\.\d+\.\d+\.\d+) - - \[(.*?)\] "(.*?)" (\d+) (\d+)'
+        match = re.match(pattern, line)
+        if match:
+            ip, timestamp, request, status, size = match.groups()
+            return {
+                'ip': ip,
+                'timestamp': timestamp,
+                'method': request.split()[0],
+                'url': request.split()[1],
+                'status': int(status),
+                'size': int(size) if size != '-' else 0
+            }
+        return None
+    
+    # Transformation des logs
+    parsed_logs = logs.rdd.map(extract_info).filter(lambda x: x is not None)
+    
+    # Analyses
+    # 1. Top 10 des URLs les plus visitées
+    top_urls = (parsed_logs
+                .map(lambda x: (x['url'], 1))
+                .reduceByKey(lambda a, b: a + b)
+                .sortBy(lambda x: x[1], ascending=False)
+                .take(10))
+    
+    # 2. Répartition par code de statut
+    status_dist = (parsed_logs
+                   .map(lambda x: (x['status'], 1))
+                   .reduceByKey(lambda a, b: a + b)
+                   .collect())
+    
+    # 3. Trafic par heure
+    hourly_traffic = (parsed_logs
+                      .map(lambda x: (x['timestamp'][:13], 1))  # Extraction de l'heure
+                      .reduceByKey(lambda a, b: a + b)
+                      .sortByKey()
+                      .collect())
+    
+    return {
+        'top_urls': top_urls,
+        'status_distribution': status_dist,
+        'hourly_traffic': hourly_traffic
+    }
+
+# Exécution
+results = analyze_web_logs()
+print("Top 10 URLs:", results['top_urls'])
+print("Status codes:", results['status_distribution'])</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-xl shadow-lg p-8">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Calcul de Statistiques parallèles</h3>
+                                <div class="code-block">
+                                    <pre><code>import numpy as np
+from mpi4py import MPI
+from dataparallel import DataAggregator
+
+def parallel_statistics():
+    """Calcul de statistiques descriptives en parallèle."""
+    
+    comm = MPI.COMM_WORLD
+    rank = comm.Get_rank()
+    size = comm.Get_size()
+    
+    # Génération de données aléatoires sur chaque processus
+    np.random.seed(rank)
+    local_data = np.random.normal(100, 15, 10000)
+    
+    # Calcul des statistiques locales
+    local_stats = {
+        'count': len(local_data),
+        'sum': np.sum(local_data),
+        'sum_squares': np.sum(local_data ** 2),
+        'min': np.min(local_data),
+        'max': np.max(local_data)
+    }
+    
+    # Réduction des statistiques
+    global_stats = {}
+    for key, value in local_stats.items():
+        if key in ['min']:
+            global_stats[key] = comm.reduce(value, op=MPI.MIN, root=0)
+        elif key in ['max']:
+            global_stats[key] = comm.reduce(value, op=MPI.MAX, root=0)
+        else:
+            global_stats[key] = comm.reduce(value, op=MPI.SUM, root=0)
+    
+    if rank == 0:
+        # Calcul des statistiques globales
+        n = global_stats['count']
+        mean = global_stats['sum'] / n
+        variance = (global_stats['sum_squares'] / n) - (mean ** 2)
+        std_dev = np.sqrt(variance)
+        
+        return {
+            'count': n,
+            'mean': mean,
+            'std_dev': std_dev,
+            'min': global_stats['min'],
+            'max': global_stats['max']
+        }
+    
+    return None
+
+# Exécution avec MPI
+if __name__ == "__main__":
+    stats = parallel_statistics()
+    if stats:
+        print(f"Statistiques globales: {stats}")</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Dépannage -->
+                    <section id="depannage" class="doc-section">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-8">Dépannage</h2>
+                        
+                        <div class="space-y-6">
+                            <div class="bg-white rounded-xl shadow-lg p-8">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Problèmes Courants</h3>
+                                
+                                <div class="space-y-6">
+                                    <div class="border-l-4 border-red-400 pl-4">
+                                        <h4 class="font-semibold text-gray-900">OutOfMemoryError dans Spark</h4>
+                                        <p class="text-sm text-gray-600 mb-2">Erreur: Java heap space</p>
+                                        <p class="text-sm text-gray-700 mb-2"><strong>Solution:</strong></p>
+                                        <div class="code-block text-sm">
+                                            <pre><code># Augmenter la mémoire allouée
+spark.conf.set("spark.driver.memory", "8g")
+spark.conf.set("spark.executor.memory", "16g")
+
+# Activer le spill sur disque
+spark.conf.set("spark.sql.adaptive.enabled", "true")
+spark.conf.set("spark.sql.adaptive.coalescePartitions.enabled", "true")</code></pre>
+                                        </div>
+                                    </div>
+
+                                    <div class="border-l-4 border-yellow-400 pl-4">
+                                        <h4 class="font-semibold text-gray-900">Erreurs de communication MPI</h4>
+                                        <p class="text-sm text-gray-600 mb-2">Erreur: MPI_ERR_COMM</p>
+                                        <p class="text-sm text-gray-700 mb-2"><strong>Solution:</strong></p>
+                                        <div class="code-block text-sm">
+                                            <pre><code># Vérifier l'installation MPI
+mpirun --version
+
+# Tester avec un programme simple
+mpirun -n 4 hostname
+
+# Vérifier le fichier hostfile
+# hosts.txt doit contenir les nœuds accessibles</code></pre>
+                                        </div>
+                                    </div>
+
+                                    <div class="border-l-4 border-blue-400 pl-4">
+                                        <h4 class="font-semibold text-gray-900">Performances médiocres</h4>
+                                        <p class="text-sm text-gray-600 mb-2">Speedup inférieur aux attentes</p>
+                                        <p class="text-sm text-gray-700 mb-2"><strong>Solution:</strong></p>
+                                        <ul class="text-sm text-gray-700 space-y-1">
+                                            <li>• Vérifier le partitionnement des données</li>
+                                            <li>• Optimiser la sérialisation (utiliser Kryo)</li>
+                                            <li>• Surveiller le skew des données</li>
+                                            <li>• Ajuster le nombre de workers</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-xl shadow-lg p-8">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Commandes de Diagnostic</h3>
+                                <div class="code-block">
+                                    <pre><code># Monitoring Spark
+spark-submit --master yarn --deploy-mode cluster --status <app_id>
+spark-submit --master yarn --deploy-mode cluster --kill <app_id>
+
+# Monitoring MPI
+mpirun -n 4 --tag-output ./mon_programme
+mpirun -n 4 --output-filename logs/output ./mon_programme
+
+# Monitoring système
+top -p <pid>
+iostat -x 1
+netstat -i
+
+# Logs Spark
+tail -f $SPARK_HOME/logs/*.out
+tail -f $SPARK_HOME/logs/*.log</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h3 class="text-2xl font-bold gradient-text mb-4">DataParallèle</h3>
+                <p class="text-gray-400 mb-4">Projet d'analyse de données parallèle - Documentation technique</p>
+                <p class="text-sm text-gray-500">© 2024 Projet DataParallèle. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling pour la navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Mise en évidence de la section active
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('.doc-section');
+            const navLinks = document.querySelectorAll('nav a[href^="#"]');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('text-blue-600');
+                link.classList.add('text-gray-600');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.remove('text-gray-600');
+                    link.classList.add('text-blue-600');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse des Performances - DataParallèle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/3.0.3/plotly.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .code-font { font-family: 'JetBrains Mono', monospace; }
+        .gradient-text { background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-xl font-bold gradient-text">DataParallèle</a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="index.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Accueil</a>
+                        <a href="algorithmes.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Algorithmes</a>
+                        <a href="performances.html" class="text-blue-600 px-3 py-2 text-sm font-medium">Performances</a>
+                        <a href="documentation.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Documentation</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-green-50 to-blue-50 pt-16 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center py-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                    Analyse des <span class="gradient-text">Performances</span>
+                </h1>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Évaluation détaillée des performances et optimisation des algorithmes parallèles
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Métriques de Performance -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Métriques Clés</h2>
+                <p class="text-xl text-gray-600">Indicateurs de performance pour l'évaluation des algorithmes parallèles</p>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-6 mb-16">
+                <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <div class="text-3xl font-bold text-blue-600 mb-2">3.2x</div>
+                    <div class="text-sm text-gray-600">Speedup Moyen</div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                    </div>
+                    <div class="text-3xl font-bold text-green-600 mb-2">85%</div>
+                    <div class="text-sm text-gray-600">Efficacité Parallèle</div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div class="text-3xl font-bold text-purple-600 mb-2">45s</div>
+                    <div class="text-sm text-gray-600">Temps d'exécution</div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>
+                        </svg>
+                    </div>
+                    <div class="text-3xl font-bold text-orange-600 mb-2">12</div>
+                    <div class="text-sm text-gray-600">Nœuds Maximum</div>
+                </div>
+            </div>
+
+            <!-- Graphiques de Performance -->
+            <div class="grid md:grid-cols-2 gap-8 mb-16">
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Scalabilité des Frameworks</h3>
+                    <div id="scalabilityPlot" style="height: 400px;"></div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Comparaison des Temps</h3>
+                    <div id="comparisonPlot" style="height: 400px;"></div>
+                </div>
+            </div>
+
+            <!-- Analyse des Goulots d'Étranglement -->
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-16">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">Analyse des Goulots d'Étranglement</h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="text-center p-6 bg-red-50 rounded-lg">
+                        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-semibold text-red-900 mb-2">Communication</h4>
+                        <p class="text-sm text-red-700 mb-2">32% du temps total</p>
+                        <p class="text-xs text-red-600">Optimisation du shuffling et de la sérialisation</p>
+                    </div>
+                    <div class="text-center p-6 bg-yellow-50 rounded-lg">
+                        <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-semibold text-yellow-900 mb-2">Mémoire</h4>
+                        <p class="text-sm text-yellow-700 mb-2">28% du temps total</p>
+                        <p class="text-xs text-yellow-600">Gestion du cache et du garbage collection</p>
+                    </div>
+                    <div class="text-center p-6 bg-blue-50 rounded-lg">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-semibold text-blue-900 mb-2">Calcul</h4>
+                        <p class="text-sm text-blue-700 mb-2">40% du temps total</p>
+                        <p class="text-xs text-blue-600">Optimisation des algorithmes et vectorisation</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommandations d'Optimisation -->
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">Recommandations d'Optimisation</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-4">Optimisations à Court Terme</h4>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-3 mt-1">
+                                    <span class="text-green-600 text-sm">1</span>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium text-gray-900">Partitionnement des données</h5>
+                                    <p class="text-sm text-gray-600">Ajuster le nombre de partitions à 2-3x le nombre de cœurs</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-3 mt-1">
+                                    <span class="text-green-600 text-sm">2</span>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium text-gray-900">Mise en cache stratégique</h5>
+                                    <p class="text-sm text-gray-600">Conserver en mémoire les RDD fréquemment utilisés</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-3 mt-1">
+                                    <span class="text-green-600 text-sm">3</span>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium text-gray-900">Sérialisation optimisée</h5>
+                                    <p class="text-sm text-gray-600">Utiliser Kryo serialization pour les performances</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-4">Optimisations à Long Terme</h4>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mr-3 mt-1">
+                                    <span class="text-blue-600 text-sm">1</span>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium text-gray-900">Architecture hybride</h5>
+                                    <p class="text-sm text-gray-600">Combiner CPU et GPU pour les calculs intensifs</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mr-3 mt-1">
+                                    <span class="text-blue-600 text-sm">2</span>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium text-gray-900">Optimisation du réseau</h5>
+                                    <p class="text-sm text-gray-600">InfiniBand ou RDMA pour réduire la latence</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mr-3 mt-1">
+                                    <span class="text-blue-600 text-sm">3</span>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium text-gray-900">Algorithmes adaptatifs</h5>
+                                    <p class="text-sm text-gray-600">Ajustement dynamique selon les caractéristiques des données</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h3 class="text-2xl font-bold gradient-text mb-4">DataParallèle</h3>
+                <p class="text-gray-400 mb-4">Projet d'analyse de données parallèle - Analyse des performances</p>
+                <p class="text-sm text-gray-500">© 2024 Projet DataParallèle. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Données de scalabilité
+        const scalabilityData = {
+            x: [1, 2, 4, 8, 12, 16, 20],
+            y: [1, 1.8, 3.2, 5.5, 7.2, 8.5, 9.1],
+            type: 'scatter',
+            mode: 'lines+markers',
+            name: 'Speedup Réel',
+            line: {color: '#3b82f6', width: 3},
+            marker: {size: 8}
+        };
+
+        const idealScalability = {
+            x: [1, 2, 4, 8, 12, 16, 20],
+            y: [1, 2, 4, 8, 12, 16, 20],
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Speedup Idéal',
+            line: {color: '#ef4444', width: 2, dash: 'dash'}
+        };
+
+        const scalabilityLayout = {
+            title: '',
+            xaxis: {title: 'Nombre de nœuds'},
+            yaxis: {title: 'Speedup'},
+            showlegend: true,
+            margin: {t: 30, r: 30, b: 50, l: 50}
+        };
+
+        Plotly.newPlot('scalabilityPlot', [scalabilityData, idealScalability], scalabilityLayout, {responsive: true});
+
+        // Comparaison des frameworks
+        const comparisonData = {
+            x: ['Hadoop', 'Spark', 'MPI', 'Flink'],
+            y: [100, 65, 45, 55],
+            type: 'bar',
+            marker: {
+                color: ['#ef4444', '#f97316', '#3b82f6', '#8b5cf6']
+            }
+        };
+
+        const comparisonLayout = {
+            title: '',
+            xaxis: {title: 'Framework'},
+            yaxis: {title: 'Temps d\'exécution (s)'},
+            showlegend: false,
+            margin: {t: 30, r: 30, b: 50, l: 50}
+        };
+
+        Plotly.newPlot('comparisonPlot', [comparisonData], comparisonLayout, {responsive: true});
+    </script>
+</body>
+</html>

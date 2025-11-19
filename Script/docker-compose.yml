@@ -1,0 +1,126 @@
+services:
+  spark-master:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.master
+    container_name: spark-master
+    hostname: spark-master
+    ports:
+      - "8080:8080"  # Spark Master Web UI
+      - "7077:7077"  # Spark Master Port
+      - "4040:4040"  # Spark Application UI
+    environment:
+      - SPARK_MODE=master
+      - SPARK_MASTER_HOST=spark-master
+      - SPARK_MASTER_PORT=7077
+      - SPARK_MASTER_WEBUI_PORT=8080
+    volumes:
+      - ./src:/app/src
+      - ./spark_jobs:/app/spark_jobs
+      - ./data:/app/data
+      - ./output:/app/output
+      - ./config:/app/config
+    networks:
+      - spark-network
+    command: >
+      bash -c "
+      /opt/spark/sbin/start-master.sh &&
+      tail -f /opt/spark/logs/*
+      "
+
+  spark-worker-1:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    container_name: spark-worker-1
+    hostname: spark-worker-1
+    depends_on:
+      - spark-master
+    ports:
+      - "8081:8081"  # Worker 1 Web UI
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_CORES=2
+      - SPARK_WORKER_MEMORY=2G
+      - SPARK_WORKER_WEBUI_PORT=8081
+    volumes:
+      - ./src:/app/src
+      - ./spark_jobs:/app/spark_jobs
+      - ./data:/app/data
+      - ./output:/app/output
+    networks:
+      - spark-network
+    command: >
+      bash -c "
+      sleep 10 &&
+      /opt/spark/sbin/start-worker.sh spark://spark-master:7077 &&
+      tail -f /opt/spark/logs/*
+      "
+
+  spark-worker-2:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    container_name: spark-worker-2
+    hostname: spark-worker-2
+    depends_on:
+      - spark-master
+    ports:
+      - "8082:8082"  # Worker 2 Web UI
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_CORES=2
+      - SPARK_WORKER_MEMORY=2G
+      - SPARK_WORKER_WEBUI_PORT=8082
+    volumes:
+      - ./src:/app/src
+      - ./spark_jobs:/app/spark_jobs
+      - ./data:/app/data
+      - ./output:/app/output
+    networks:
+      - spark-network
+    command: >
+      bash -c "
+      sleep 10 &&
+      /opt/spark/sbin/start-worker.sh spark://spark-master:7077 &&
+      tail -f /opt/spark/logs/*
+      "
+
+  spark-worker-3:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    container_name: spark-worker-3
+    hostname: spark-worker-3
+    depends_on:
+      - spark-master
+    ports:
+      - "8083:8083"  # Worker 3 Web UI
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_CORES=2
+      - SPARK_WORKER_MEMORY=2G
+      - SPARK_WORKER_WEBUI_PORT=8083
+    volumes:
+      - ./src:/app/src
+      - ./spark_jobs:/app/spark_jobs
+      - ./data:/app/data
+      - ./output:/app/output
+    networks:
+      - spark-network
+    command: >
+      bash -c "
+      sleep 10 &&
+      /opt/spark/sbin/start-worker.sh spark://spark-master:7077 &&
+      tail -f /opt/spark/logs/*
+      "
+
+networks:
+  spark-network:
+    driver: bridge
+
+# To scale workers dynamically:
+# docker-compose up --scale spark-worker=5

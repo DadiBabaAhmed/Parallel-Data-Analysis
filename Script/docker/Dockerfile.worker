@@ -1,0 +1,41 @@
+FROM continuumio/miniconda3
+
+# Install minimal OS utilities needed for Spark download and process listing
+RUN apt-get update && apt-get install -y \
+    wget \
+    procps \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy environment spec early so it can be cached separately from the app code
+COPY environment.yml /tmp/environment.yml
+
+# Create a conda environment for the app with the pinned packages from environment.yml
+RUN conda env create -f /tmp/environment.yml -n pda && conda clean -afy
+
+# Ensure the conda env's bin directory is first on PATH
+ENV PATH=/opt/conda/envs/pda/bin:$PATH
+
+# Install Spark
+ENV SPARK_VERSION=3.5.0
+ENV HADOOP_VERSION=3
+ENV SPARK_HOME=/opt/spark
+ENV PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
+ENV PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.9.7-src.zip:$PYTHONPATH
+
+RUN wget -q https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz \
+    && tar -xzf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz \
+    && mv spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} ${SPARK_HOME} \
+    && rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
+
+# Working directory and copy project files
+WORKDIR /app
+COPY . /app
+
+# Expose worker port
+EXPOSE 8081
+
+# Set environment variables
+ENV SPARK_WORKER_CORES=2
+ENV SPARK_WORKER_MEMORY=2G
+
+CMD ["/bin/bash","-c","/opt/spark/sbin/start-worker.sh spark://spark-master:7077 && tail -f /opt/spark/logs/*"]
