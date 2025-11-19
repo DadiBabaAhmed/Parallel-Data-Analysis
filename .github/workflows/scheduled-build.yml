@@ -1,0 +1,47 @@
+name: Scheduled Docker Build
+
+on:
+  schedule:
+    # Run every Sunday at 2 AM UTC
+    - cron: '0 2 * * 0'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  scheduled-build:
+    name: Scheduled Docker Image Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Master Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./Script
+          file: ./Script/docker/Dockerfile.master
+          push: false
+          tags: |
+            spark-pda-master:${{ github.sha }}
+            spark-pda-master:scheduled-${{ github.run_id }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build Worker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./Script
+          file: ./Script/docker/Dockerfile.worker
+          push: false
+          tags: |
+            spark-pda-worker:${{ github.sha }}
+            spark-pda-worker:scheduled-${{ github.run_id }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Update base images
+        run: |
+          echo "✅ Scheduled build completed"
+          echo "Time: $(date)"
+          echo "This rebuild ensures latest security patches are included"

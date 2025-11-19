@@ -11,11 +11,11 @@ import pandas as pd
 import numpy as np
 
 # Import framework components
-from src.data_loader import DataLoader
-from src.data_analyzer import DataAnalyzer
-from src.error_handler import ErrorHandler
-from src.performance_monitor import PerformanceMonitor
-from src.graph_generator import GraphGenerator
+from data_loader import DataLoader
+from data_analyzer import DataAnalyzer
+from error_handler import ErrorHandler
+from performance_monitor import PerformanceMonitor
+from graph_generator import GraphGenerator
 from spark_jobs.mapreduce_job import MapReduceJob
 from spark_jobs.aggregation_job import AggregationJob
 from spark_jobs.statistical_analysis import StatisticalAnalysis

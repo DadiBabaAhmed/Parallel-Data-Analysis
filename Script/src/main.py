@@ -163,7 +163,7 @@ class ParallelDataAnalysis:
         with open(summary_path, 'w') as f:
             json.dump(results, f, indent=4, default=str)
         
-        print(f"✓ Results saved to {output_path}")
+        print(f"✓ Results saved to {preview_path}")
         print(f"✓ Analysis summary saved to {summary_path}")
     
     def cleanup(self):

@@ -1,0 +1,9 @@
+[
+    {
+        "timestamp": "2025-11-19T10:56:13.886296",
+        "component": "Spark Initialization",
+        "error": "[JAVA_GATEWAY_EXITED] Java gateway process exited before sending its port number.",
+        "traceback": "Traceback (most recent call last):\n  File \"/app/src/main.py\", line 59, in init_spark\n    .getOrCreate()\n  File \"/opt/spark/python/pyspark/sql/session.py\", line 497, in getOrCreate\n    sc = SparkContext.getOrCreate(sparkConf)\n  File \"/opt/spark/python/pyspark/context.py\", line 515, in getOrCreate\n    SparkContext(conf=conf or SparkConf())\n  File \"/opt/spark/python/pyspark/context.py\", line 201, in __init__\n    SparkContext._ensure_initialized(self, gateway=gateway, conf=conf)\n  File \"/opt/spark/python/pyspark/context.py\", line 436, in _ensure_initialized\n    SparkContext._gateway = gateway or launch_gateway(conf)\n  File \"/opt/spark/python/pyspark/java_gateway.py\", line 107, in launch_gateway\n    raise PySparkRuntimeError(\npyspark.errors.exceptions.base.PySparkRuntimeError: [JAVA_GATEWAY_EXITED] Java gateway process exited before sending its port number.\n",
+        "additional_info": null
+    }
+]

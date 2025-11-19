@@ -4,6 +4,7 @@ FROM continuumio/miniconda3
 RUN apt-get update && apt-get install -y \
     wget \
     procps \
+    openjdk-17-jre \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy environment spec early so it can be cached separately from the app code
@@ -41,5 +42,6 @@ EXPOSE 7077 8080 4040
 ENV SPARK_MASTER_HOST=spark-master
 ENV SPARK_MASTER_PORT=7077
 ENV SPARK_MASTER_WEBUI_PORT=8080
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 
 CMD ["/bin/bash","-c","/opt/spark/sbin/start-master.sh && tail -f /opt/spark/logs/*"]

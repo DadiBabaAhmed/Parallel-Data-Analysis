@@ -1,0 +1,77 @@
+# Git files
+.git
+.gitignore
+.github
+
+# Documentation
+*.md
+docs/
+README.md
+Deployment_Guide.md
+
+# Build artifacts
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing
+tests/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Node/Web
+node_modules/
+npm-debug.log
+.env.local
+.env.*.local
+
+# Docker files (don't need to copy Dockerfiles into image)
+docker-compose.yml
+.dockerignore
+Dockerfile*
+
+# Misc
+.env
+.env.*.local
+*.tmp
+*.temp
+
+# Keep only necessary files
+!src/**
+!spark_jobs/**
+!config/**
+!data/**
+!requirements.txt
+!environment.yml
+!app_config.yaml

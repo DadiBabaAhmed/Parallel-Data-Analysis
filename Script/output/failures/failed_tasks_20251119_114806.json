@@ -1,0 +1,9 @@
+[
+    {
+        "timestamp": "2025-11-19T11:48:29.631439",
+        "component": "Analysis Pipeline",
+        "error": "name 'output_path' is not defined",
+        "traceback": "Traceback (most recent call last):\n  File \"/app/src/main.py\", line 119, in run_analysis\n    self.save_results(df, results)\n  File \"/app/src/main.py\", line 166, in save_results\n    print(f\"\u2713 Results saved to {output_path}\")\nNameError: name 'output_path' is not defined\n",
+        "additional_info": null
+    }
+]

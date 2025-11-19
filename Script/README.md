@@ -1,12 +1,12 @@
 # Parallel Data Analysis Framework
 
-A distributed data analysis framework using Apache Spark and Docker for parallel processing of large-scale datasets.
+A distributed data analysis framework using Apache Spark and Docker for parallel processing of large-scale datasets. Uses **conda-based Docker images** for reproducible, cross-platform environments.
 
 ## Features
 
 - **Multi-Format Support**: CSV, JSON, Parquet, Avro
-- **Parallel Processing**: Distributed computing using Apache Spark
-- **Docker Containerization**: Easy deployment with multiple worker nodes
+- **Parallel Processing**: Distributed computing using Apache Spark 3.5.0
+- **Docker Containerization**: Easy deployment with conda environment for reproducibility
 - **Comprehensive Analysis**:
   - Statistical analysis (mean, median, std, percentiles)
   - Data aggregation (sum, avg, min, max, count)
@@ -19,24 +19,46 @@ A distributed data analysis framework using Apache Spark and Docker for parallel
 ## Project Structure
 
 ```
-parallel-data-analysis/
+Script/
 ├── src/                      # Main application code
+│   ├── main.py              # Orchestrator
+│   ├── data_loader.py       # Data ingestion
+│   ├── data_analyzer.py     # Analysis logic
+│   └── ... (9 more files)
+│
 ├── spark_jobs/              # Spark job implementations
+│   ├── aggregation_job.py
+│   ├── mapreduce_job.py
+│   └── statistical_analysis.py
+│
+├── docs/                    # Documentation (NEW)
+│   ├── README.md           # Documentation index
+│   ├── QUICK_REFERENCE.md  # Quick start guide
+│   └── ... (3 more guides)
+│
+├── logs/                    # Build logs archive (NEW)
+│   ├── README.md
+│   └── build_log*.txt
+│
 ├── config/                  # Configuration files
 ├── docker/                  # Docker configurations
+│   ├── Dockerfile.master
+│   └── Dockerfile.worker
+│
 ├── output/                  # Analysis results
-│   ├── general/            # Main results and graphs
-│   ├── statistics/         # Performance metrics
-│   └── failures/           # Error logs
+│   ├── general/
+│   ├── statistics/
+│   └── failures/
+│
 ├── data/input/             # Input datasets
-└── tests/                  # Unit tests
+└── docker-compose.yml      # Container orchestration
 ```
 
 ## Prerequisites
 
-- Docker and Docker Compose
-- Python 3.8+
-- 8GB+ RAM recommended
+- Docker and Docker Compose (all other dependencies included in container image)
+- 22GB disk space (4 images × 5.7GB each, includes Java + Spark + conda packages)
+- RAM: 8GB minimum recommended (2GB per worker + 4GB master)
 
 ## Quick Start
 
@@ -44,7 +66,7 @@ parallel-data-analysis/
 
 ```bash
 git clone <repository-url>
-cd parallel-data-analysis
+cd parallel-data-analysis/Script
 ```
 
 ### 2. Prepare Your Data
@@ -59,22 +81,30 @@ cp your_data.csv data/input/
 ### 3. Start the Cluster
 
 ```bash
-# Start Spark cluster with 3 workers
-docker-compose up -d
+# Start Spark cluster (4 containers: 1 master + 3 workers)
+docker compose up -d
 
-# Check cluster status
-docker-compose ps
+# Verify all containers are running
+docker ps | findstr spark
 ```
 
 ### 4. Run Analysis
 
 ```bash
-# Enter the master container
-docker exec -it spark-master bash
+# Run analysis with conda-based Python environment
+docker exec spark-master /opt/conda/envs/pda/bin/python \
+  /app/src/main.py \
+  --input /app/data/input/your_data.csv \
+  --master spark://spark-master:7077 \
+  --analysis full
 
-# Run analysis
-cd /app
-python3 -m src.main --input data/input/your_data.csv --analysis full
+# Results saved to output/general/
+```
+
+### 5. Stop Cluster
+
+```bash
+docker compose down -v
 ```
 
 ## Usage Options
@@ -83,41 +113,72 @@ python3 -m src.main --input data/input/your_data.csv --analysis full
 
 ```bash
 # Full analysis (statistical + aggregation + correlation)
-python3 -m src.main --input data.csv --analysis full
+docker exec spark-master /opt/conda/envs/pda/bin/python \
+  /app/src/main.py --input /app/data/input/data.csv --analysis full
 
 # Statistical analysis only
-python3 -m src.main --input data.csv --analysis statistical
+docker exec spark-master /opt/conda/envs/pda/bin/python \
+  /app/src/main.py --input /app/data/input/data.csv --analysis statistical
 
 # Aggregation analysis only
-python3 -m src.main --input data.csv --analysis aggregation
+docker exec spark-master /opt/conda/envs/pda/bin/python \
+  /app/src/main.py --input /app/data/input/data.csv --analysis aggregation
 ```
 
 ### Cluster Modes
 
 ```bash
-# Local mode (single machine)
-python3 -m src.main --input data.csv --master "local[*]"
+# Cluster mode (distributed) - Recommended
+docker exec spark-master /opt/conda/envs/pda/bin/python \
+  /app/src/main.py --input /app/data/input/data.csv --master spark://spark-master:7077
 
-# Cluster mode (distributed)
-python3 -m src.main --input data.csv --master "spark://spark-master:7077"
+# Local mode (single machine, for small datasets)
+docker exec spark-master /opt/conda/envs/pda/bin/python \
+  /app/src/main.py --input /app/data/input/data.csv --master "local[*]"
 ```
 
 ## Monitoring
 
 ### Web UIs
 
-- **Spark Master**: http://localhost:8080
-- **Spark Application**: http://localhost:4040
-- **Worker 1**: http://localhost:8081
-- **Worker 2**: http://localhost:8082
-- **Worker 3**: http://localhost:8083
+| Service | URL | Port | Purpose |
+|---------|-----|------|---------|
+| Spark Master | http://localhost:8080 | 8080 | Cluster status & workers |
+| Spark Application | http://localhost:4040 | 4040 | Job details (when running) |
+| Worker 1 | http://localhost:8081 | 8081 | Worker node 1 status |
+| Worker 2 | http://localhost:8082 | 8082 | Worker node 2 status |
+| Worker 3 | http://localhost:8083 | 8083 | Worker node 3 status |
+
+### Health Check Status
+
+The cluster includes automatic health checks for reliability:
+
+```bash
+# View health status (shows healthy/unhealthy for each container)
+docker-compose ps
+
+# Get detailed health info
+docker inspect spark-master | grep -A 10 Health
+
+# Verify cluster is ready before running analysis
+make test-health
+```
+
+**Health checks ensure:**
+- ✅ Master Web UI is responding
+- ✅ Workers are connected and ready
+- ✅ Automatic restart on failure
+- ✅ Better error messages for users
+
+See `docs/HEALTH_CHECKS_CI_CD_GUIDE.md` for detailed health check documentation.
 
 ### Output Files
 
 After analysis completion, check:
 
 1. **General Output** (`output/general/`):
-   - `results_[timestamp].csv` - Processed data
+   - `results_[timestamp].csv` - Processed data (limited preview)
+   - `results_[timestamp]_spark/` - Full Spark-written results (partitioned)
    - `analysis_[timestamp].json` - Analysis summary
    - `graphs/` - Generated visualizations
 
@@ -187,24 +248,25 @@ SPARK_CONFIG = {
 ```python
 from src.main import ParallelDataAnalysis
 
-# Initialize analyzer
+# Initialize analyzer with Spark cluster
 analyzer = ParallelDataAnalysis(
+    app_name="MyAnalysis",
     master="spark://spark-master:7077"
 )
 
 # Run analysis
 analyzer.run_analysis(
-    input_path="data/input/data.csv",
+    input_path="/app/data/input/data.csv",
     analysis_type="full"
 )
 ```
 
-### Custom Analysis
+### Custom Analysis with spark_jobs
 
 ```python
-from src.data_loader import DataLoader
-from src.data_analyzer import DataAnalyzer
 from pyspark.sql import SparkSession
+from src.data_loader import DataLoader
+from spark_jobs.aggregation_job import AggregationJob
 
 # Create Spark session
 spark = SparkSession.builder \
@@ -212,13 +274,13 @@ spark = SparkSession.builder \
     .master("spark://spark-master:7077") \
     .getOrCreate()
 
-# Load data
+# Load and analyze data
 loader = DataLoader(spark, error_handler)
 df = loader.load_data("data.csv")
 
-# Analyze
-analyzer = DataAnalyzer(spark, error_handler)
-stats = analyzer.statistical_analysis(df)
+# Use job classes for specific operations
+job = AggregationJob()
+result = job.time_series_aggregation(df, 'timestamp', 'value', interval='1 hour')
 ```
 
 ## Performance Tuning
@@ -247,85 +309,178 @@ spark.sql.adaptive.skewJoin.enabled: true
 
 ## Troubleshooting
 
-### Out of Memory
-
+### ModuleNotFoundError: No module named 'numpy'
+**Issue:** Using system Python instead of conda environment
+**Fix:** Always use the conda environment Python:
 ```bash
-# Increase executor memory in docker-compose.yml
-SPARK_WORKER_MEMORY=4G
+# ✅ Correct
+docker exec spark-master /opt/conda/envs/pda/bin/python script.py
 
-# Or reduce partitions in config
-spark.sql.shuffle.partitions: 50
+# ❌ Wrong
+docker exec spark-master python script.py
+```
+
+### Java not found / Spark won't start
+**Issue:** Java not installed in container
+**Fix:** Java 17 is included in the Docker image. If error persists, rebuild:
+```bash
+docker compose build --no-cache
+docker compose up -d
+```
+
+### Containers won't start
+**Issue:** Port conflicts or Docker daemon issues
+**Fix:**
+```bash
+# Check if ports are free
+netstat -ano | findstr ":7077\|:8080"
+
+# Stop any existing containers
+docker compose down -v
+
+# Restart
+docker compose up -d
+```
+
+### Analysis runs but results don't save
+**Issue:** Known bug - output_path variable undefined
+**Fix:** Already identified and documented. Manually copy results from Spark writer:
+```bash
+docker exec spark-master ls -la /app/output/general/results_*_spark/
 ```
 
 ### Slow Performance
-
+**Solution:**
 1. Check worker status: http://localhost:8080
-2. Review execution metrics in `output/statistics/`
-3. Increase number of workers
-4. Enable adaptive query execution
+2. Increase memory: Edit `docker-compose.yml` `SPARK_WORKER_MEMORY`
+3. Enable adaptive execution: Already configured in `spark_config.py`
 
-### Connection Errors
-
+### Container Health Check
 ```bash
+# View master logs
+docker logs -f spark-master
+
+# View worker logs
+docker logs -f spark-worker-1
+
 # Check cluster connectivity
-docker exec -it spark-master /opt/spark/bin/spark-submit \
-  --master spark://spark-master:7077 \
-  --deploy-mode client \
-  --class org.apache.spark.examples.SparkPi \
-  /opt/spark/examples/jars/spark-examples*.jar
+docker exec spark-master curl -s http://localhost:8080/api/v1/applications
 ```
 
 ## Testing
 
 ```bash
-# Run unit tests
-pytest tests/
+# Run smoke tests (verify basic functionality)
+docker exec spark-master /opt/conda/envs/pda/bin/python \
+  /app/src/example_test.py generate
 
-# With coverage
-pytest --cov=src tests/
+# Quick demo
+docker exec spark-master /opt/conda/envs/pda/bin/python \
+  /app/src/example_test.py quick
+
+# Full integration test
+docker exec spark-master /opt/conda/envs/pda/bin/python \
+  /app/src/example_test.py
 ```
 
 ## Examples
 
 ### Example 1: Sales Analysis
 
-```python
-# Analyze sales data
-python3 -m src.main \
-  --input data/input/sales.csv \
+```bash
+docker exec spark-master /opt/conda/envs/pda/bin/python \
+  /app/src/main.py \
+  --input /app/data/input/sales.csv \
   --analysis full \
-  --master "spark://spark-master:7077"
+  --master spark://spark-master:7077
 ```
 
-### Example 2: Log Analysis
+### Example 2: Log Analysis with MapReduce
 
 ```python
 from spark_jobs.mapreduce_job import MapReduceJob
 
-# Word count on logs
 job = MapReduceJob()
 word_counts = job.word_count(log_df, 'message')
+word_counts.show(20)
 ```
 
-### Example 3: Time Series
+### Example 3: Time Series Aggregation
 
 ```python
 from spark_jobs.aggregation_job import AggregationJob
 
-# Aggregate by hour
 job = AggregationJob()
 hourly_metrics = job.time_series_aggregation(
     df, 'timestamp', 'value', interval='1 hour'
 )
 ```
 
-## Contributing
+### Example 4: Advanced Analysis with All Features
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
+```bash
+docker exec spark-master /opt/conda/envs/pda/bin/python \
+  /app/src/advanced_example.py --master spark://spark-master:7077
+```
+
+## Documentation
+
+Comprehensive documentation is available in the `docs/` directory:
+
+- **[docs/README.md](docs/README.md)** - Documentation index and guide
+- **[docs/QUICK_REFERENCE.md](docs/QUICK_REFERENCE.md)** - Quick start and common commands
+- **[docs/ARCHITECTURE_OVERVIEW.md](docs/ARCHITECTURE_OVERVIEW.md)** - System design and data flow
+- **[docs/HEALTH_CHECKS_CI_CD_GUIDE.md](docs/HEALTH_CHECKS_CI_CD_GUIDE.md)** - Health checks and CI/CD pipeline
+- **[docs/IMPLEMENTATION_ROADMAP.md](docs/IMPLEMENTATION_ROADMAP.md)** - Development roadmap and improvements
+- **[docs/BUILD_VERIFICATION_REPORT.md](docs/BUILD_VERIFICATION_REPORT.md)** - Build specifications
+- **[docs/BUILD_STATUS_FINAL.md](docs/BUILD_STATUS_FINAL.md)** - Build verification and next steps
+- **[docs/EXECUTION_SUMMARY.md](docs/EXECUTION_SUMMARY.md)** - Pipeline execution results
+
+Historical build logs are in `logs/` directory.
+
+## Development & CI/CD
+
+### Automated Testing & Quality
+
+This project includes automated CI/CD pipeline that runs on every push:
+
+```bash
+# GitHub Actions automatically:
+✅ Runs code quality checks (linting, formatting)
+✅ Executes unit tests with coverage reporting
+✅ Builds Docker images
+✅ Performs security scans
+✅ Reports results
+```
+
+**See:** [docs/HEALTH_CHECKS_CI_CD_GUIDE.md](docs/HEALTH_CHECKS_CI_CD_GUIDE.md)
+
+### Local Development
+
+```bash
+# Install dev dependencies
+pip install -r requirements.txt
+pip install pytest pytest-cov flake8 black isort
+
+# Run code quality checks
+make lint
+
+# Run unit tests
+make test
+
+# Run all CI checks locally
+make ci-test
+```
+
+### Making Changes
+
+1. Create a feature branch
+2. Make your changes
+3. Run `make ci-test` to verify locally
+4. Push to GitHub
+5. CI/CD pipeline runs automatically
+6. Create Pull Request when ready
+7. Merge after checks pass
 
 ## License
 

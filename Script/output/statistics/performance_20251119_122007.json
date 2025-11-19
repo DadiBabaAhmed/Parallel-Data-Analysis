@@ -1,0 +1,47 @@
+{
+    "job_start_time": "2025-11-19T12:20:13.093915",
+    "job_end_time": "2025-11-19T12:20:27.605811",
+    "total_duration": 14.511883735656738,
+    "stages": {
+        "data_loading": {
+            "start_time": "2025-11-19T12:20:14.096042",
+            "end_time": "2025-11-19T12:20:22.388140",
+            "duration_seconds": 8.292,
+            "duration_formatted": "8.29 seconds",
+            "percentage_of_total": 71.18
+        },
+        "statistical_analysis": {
+            "start_time": "2025-11-19T12:20:23.544903",
+            "end_time": "2025-11-19T12:20:25.648517",
+            "duration_seconds": 2.104,
+            "duration_formatted": "2.10 seconds",
+            "percentage_of_total": 18.06
+        },
+        "visualization": {
+            "start_time": "2025-11-19T12:20:25.648546",
+            "end_time": "2025-11-19T12:20:26.902984",
+            "duration_seconds": 1.254,
+            "duration_formatted": "1.25 seconds",
+            "percentage_of_total": 10.76
+        }
+    },
+    "system_metrics": {
+        "start": {
+            "cpu_percent": 59.2,
+            "memory_percent": 36.8,
+            "memory_used_gb": 4.19,
+            "memory_total_gb": 11.39,
+            "disk_usage_percent": 2.9
+        },
+        "end": {
+            "cpu_percent": 4.6,
+            "memory_percent": 43.6,
+            "memory_used_gb": 4.97,
+            "memory_total_gb": 11.39,
+            "disk_usage_percent": 2.9
+        }
+    },
+    "spark_metrics": {
+        "error": "object of type 'JavaObject' has no len()"
+    }
+}

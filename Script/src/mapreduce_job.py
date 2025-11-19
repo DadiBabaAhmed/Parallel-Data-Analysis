@@ -11,7 +11,6 @@ The file remains as a pointer to avoid silent failures but intentionally
 raises an ImportError to force updating code paths.
 """
 
-raise ImportError(
-	"src.mapreduce_job was moved to spark_jobs.mapreduce_job; "
-	"update imports to 'from spark_jobs.mapreduce_job import MapReduceJob'"
-)
+from spark_jobs.mapreduce_job import MapReduceJob
+
+__all__ = ["MapReduceJob"]

@@ -1,0 +1,46 @@
+============================================================
+PARALLEL DATA ANALYSIS - PERFORMANCE REPORT
+============================================================
+
+Job Start Time: 2025-11-19T12:20:13.093915
+Job End Time: 2025-11-19T12:20:27.605811
+Total Duration: 14.51 seconds
+
+------------------------------------------------------------
+STAGE EXECUTION TIMES
+------------------------------------------------------------
+
+DATA_LOADING:
+  Duration: 8.29 seconds
+  Percentage: 71.18%
+
+STATISTICAL_ANALYSIS:
+  Duration: 2.10 seconds
+  Percentage: 18.06%
+
+VISUALIZATION:
+  Duration: 1.25 seconds
+  Percentage: 10.76%
+
+------------------------------------------------------------
+SYSTEM RESOURCES
+------------------------------------------------------------
+
+START:
+  CPU Usage: 59.2%
+  Memory Usage: 36.8% (4.19 GB / 11.39 GB)
+  Disk Usage: 2.9%
+
+END:
+  CPU Usage: 4.6%
+  Memory Usage: 43.6% (4.97 GB / 11.39 GB)
+  Disk Usage: 2.9%
+
+------------------------------------------------------------
+SPARK CLUSTER INFORMATION
+------------------------------------------------------------
+
+Application ID: N/A
+Spark Version: N/A
+Default Parallelism: N/A
+Executor Count: N/A

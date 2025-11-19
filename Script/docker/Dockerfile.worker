@@ -4,6 +4,7 @@ FROM continuumio/miniconda3
 RUN apt-get update && apt-get install -y \
     wget \
     procps \
+    openjdk-17-jre \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy environment spec early so it can be cached separately from the app code
@@ -37,5 +38,6 @@ EXPOSE 8081
 # Set environment variables
 ENV SPARK_WORKER_CORES=2
 ENV SPARK_WORKER_MEMORY=2G
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 
 CMD ["/bin/bash","-c","/opt/spark/sbin/start-worker.sh spark://spark-master:7077 && tail -f /opt/spark/logs/*"]
