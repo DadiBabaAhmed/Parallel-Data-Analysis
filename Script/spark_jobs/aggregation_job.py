@@ -129,7 +129,7 @@ class AggregationJob:
         result = df.groupBy(F.window(timestamp_col, interval)).agg(
             F.sum(value_col).alias(f'{value_col}_sum'),
             F.avg(value_col).alias(f'{value_col}_avg'),
-            F.min(value_col).alias(f'{value_val}_min') if False else F.min(value_col).alias(f'{value_col}_min'),
+            F.min(value_col).alias(f'{value_col}_min'),
             F.max(value_col).alias(f'{value_col}_max'),
             F.count('*').alias('count')
         )
