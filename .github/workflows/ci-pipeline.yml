@@ -73,6 +73,9 @@ jobs:
           pip install -r Script/requirements.txt
           pip install pytest pytest-cov pytest-timeout pytest-mock
 
+      - name: Add Script directory to PYTHONPATH
+        run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)/Script" >> $GITHUB_ENV
+
       - name: Run unit tests with coverage
         run: |
           cd Script
