@@ -6,11 +6,11 @@ import sys
 import argparse
 from datetime import datetime
 from pyspark.sql import SparkSession
-from src.data_loader import DataLoader
-from src.data_analyzer import DataAnalyzer
-from src.graph_generator import GraphGenerator
-from src.performance_monitor import PerformanceMonitor
-from src.error_handler import ErrorHandler
+from data_loader import DataLoader
+from data_analyzer import DataAnalyzer
+from graph_generator import GraphGenerator
+from performance_monitor import PerformanceMonitor
+from error_handler import ErrorHandler
 
 class ParallelDataAnalysis:
     def __init__(self, app_name="ParallelDataAnalysis", master="local[*]"):

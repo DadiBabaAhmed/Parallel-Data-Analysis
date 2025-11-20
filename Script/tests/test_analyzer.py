@@ -31,35 +31,14 @@ def test_statistical_analysis_no_numeric_columns():
     assert "No numeric columns found" in result["message"]
 
 
-def test_statistical_analysis_with_numeric_columns():
+def test_statistical_analysis_with_numeric_columns(spark_session):
     """Test statistical analysis with numeric columns"""
-    spark = MagicMock()
     error_handler = MagicMock()
-    analyzer = DataAnalyzer(spark, error_handler)
+    analyzer = DataAnalyzer(spark_session, error_handler)
 
-    df = MagicMock()
-
-    # Mock schema with numeric field
-    field = MagicMock()
-    field.name = "value"
-    field.dataType = IntegerType()
-    df.schema.fields = [field]
-
-    # Mock describe result
-    describe_df = MagicMock()
-    describe_df.toPandas.return_value.to_dict.return_value = {"summary": ["count", "mean"]}
-    df.select.return_value.describe.return_value = describe_df
-
-    # Mock column statistics
-    mock_row = MagicMock()
-    mock_row.asDict.return_value = {
-        'mean': 10.5,
-        'stddev': 2.5,
-        'min': 5,
-        'max': 20,
-        'count': 100
-    }
-    df.select.return_value.collect.return_value = [mock_row]
+    # Create a real DataFrame with numeric columns
+    data = [(1, 10), (2, 20), (3, 30), (4, 40)]
+    df = spark_session.createDataFrame(data, ["id", "value"])
 
     result = analyzer.statistical_analysis(df)
     assert "summary" in result

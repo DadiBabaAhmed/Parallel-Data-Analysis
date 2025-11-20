@@ -27,6 +27,11 @@ def test_plot_distributions(mock_plt, tmp_path):
         'text': ['a'] * 100
     })
 
+    # Mock subplots to return figure and axes
+    mock_fig = MagicMock()
+    mock_axes = MagicMock()
+    mock_plt.subplots.return_value = (mock_fig, mock_axes)
+
     # Create output directory
     os.makedirs(gen.output_dir, exist_ok=True)
 
@@ -86,6 +91,11 @@ def test_plot_statistical_summary(mock_plt):
             'col2': [100, 25.3, 5.1]
         }
     }
+
+    # Mock subplots to return figure and axes
+    mock_fig = MagicMock()
+    mock_axes = [MagicMock(), MagicMock()]
+    mock_plt.subplots.return_value = (mock_fig, mock_axes)
 
     os.makedirs(gen.output_dir, exist_ok=True)
     gen.plot_statistical_summary(stats_data)
