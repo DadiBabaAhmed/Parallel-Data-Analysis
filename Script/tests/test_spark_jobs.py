@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import MagicMock
 from spark_jobs.aggregation_job import AggregationJob
 from spark_jobs.mapreduce_job import MapReduceJob
-from spark_jobs.statistical_analysis import StatisticalAnalysisJob
+from spark_jobs.statistical_analysis import StatisticalAnalysis
 
 
 def test_aggregation_job_instance():
@@ -19,7 +19,7 @@ def test_mapreduce_word_count():
 
 
 def test_statistical_analysis_run():
-    job = StatisticalAnalysisJob()
+    job = StatisticalAnalysis()
     df = MagicMock()
     summary = job.describe(df)
     assert summary is not None
