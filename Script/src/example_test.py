@@ -70,7 +70,7 @@ def run_local_test():
     print("="*60 + "\n")
     
     # Import framework components
-    from .main import ParallelDataAnalysis
+    from main import ParallelDataAnalysis
     
     # Create sample data
     save_sample_data()
@@ -102,9 +102,9 @@ def run_local_test():
 def run_quick_analysis():
     """Run a quick analysis demonstration"""
     from pyspark.sql import SparkSession
-    from .data_loader import DataLoader
-    from .data_analyzer import DataAnalyzer
-    from .error_handler import ErrorHandler
+    from data_loader import DataLoader
+    from data_analyzer import DataAnalyzer
+    from error_handler import ErrorHandler
     from datetime import datetime
     
     print("\n" + "="*60)
