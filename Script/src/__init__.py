@@ -1,15 +1,17 @@
 """
 src package for Parallel-Data-Analysis.
 
-This file makes the src directory a proper Python package so that
-relative imports (e.g., from .data_loader import DataLoader) work and
-modules can be imported as `src.<module>` from tests and other code.
+Use relative imports so `python -m src.main` works when `src` is
+imported as a package inside the container. Absolute imports (e.g.
+`from data_loader import DataLoader`) failed because the package
+parent directory may not be on sys.path in all execution contexts.
 """
-from data_loader import DataLoader
-from data_analyzer import DataAnalyzer
-from graph_generator import GraphGenerator
-from performance_monitor import PerformanceMonitor
-from error_handler import ErrorHandler
+
+from .data_loader import DataLoader
+from .data_analyzer import DataAnalyzer
+from .graph_generator import GraphGenerator
+from .performance_monitor import PerformanceMonitor
+from .error_handler import ErrorHandler
 
 __all__ = [
     "DataLoader",

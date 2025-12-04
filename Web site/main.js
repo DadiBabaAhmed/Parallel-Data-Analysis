@@ -20,7 +20,302 @@ let simulationInterval = null;
 document.addEventListener('DOMContentLoaded', function() {
     initializeCharts();
     updateSimulation();
+    // Fetch cluster hosts and recent results for the UI
+    fetchHosts();
+    fetchResults();
+    fetchInputFiles();
 });
+
+// Base URL for the local API server
+const API_BASE = 'http://localhost:5000';
+
+async function fetchHosts() {
+    try {
+        const res = await fetch(`${API_BASE}/api/hosts`);
+        const hosts = await res.json();
+        const containerList = document.getElementById('hostsList');
+        containerList.innerHTML = '';
+        hosts.forEach(h => {
+            const a = document.createElement('a');
+            a.href = h.url;
+            a.target = '_blank';
+            a.rel = 'noreferrer noopener';
+            a.className = 'block text-blue-600 hover:underline';
+            a.textContent = `${h.name} — ${h.url}`;
+            containerList.appendChild(a);
+        });
+    } catch (err) {
+        const containerList = document.getElementById('hostsList');
+        containerList.innerHTML = '<div class="text-red-600">Impossible de contacter l\'API (run `make run-api`)</div>';
+        console.error('fetchHosts error', err);
+    }
+}
+
+async function fetchResults() {
+    const resultsArea = document.getElementById('resultsArea');
+    resultsArea.innerHTML = '<div class="text-sm text-gray-500">Chargement...</div>';
+    try {
+        const res = await fetch(`${API_BASE}/api/results`);
+        const data = await res.json();
+        // Build UI: show graphs thumbnails and JSON files list
+        const wrapper = document.createElement('div');
+        wrapper.className = 'space-y-6';
+
+        // Graphs
+        const graphsSection = document.createElement('div');
+        const gTitle = document.createElement('h5');
+        gTitle.className = 'font-semibold mb-3';
+        gTitle.textContent = 'Graphiques';
+        graphsSection.appendChild(gTitle);
+        const grid = document.createElement('div');
+        grid.className = 'grid md:grid-cols-3 gap-4';
+        if (data.graphs && data.graphs.length) {
+            data.graphs.slice().reverse().forEach(name => {
+                const card = document.createElement('div');
+                card.className = 'bg-gray-50 p-3 rounded-lg';
+                const img = document.createElement('img');
+                img.src = `${API_BASE}/api/graphs/${encodeURIComponent(name)}`;
+                img.alt = name;
+                img.className = 'w-full h-40 object-contain rounded';
+                const caption = document.createElement('div');
+                caption.className = 'text-sm text-gray-700 mt-2';
+                caption.textContent = name;
+                card.appendChild(img);
+                card.appendChild(caption);
+                grid.appendChild(card);
+            });
+        } else {
+            grid.innerHTML = '<div class="text-sm text-gray-500">Aucun graphique trouvé.</div>';
+        }
+        graphsSection.appendChild(grid);
+        wrapper.appendChild(graphsSection);
+
+        // Statistics / JSON
+        const statsSection = document.createElement('div');
+        const sTitle = document.createElement('h5');
+        sTitle.className = 'font-semibold mb-3';
+        sTitle.textContent = 'Fichiers de Statistiques (JSON)';
+        statsSection.appendChild(sTitle);
+        const list = document.createElement('div');
+        list.className = 'space-y-2';
+        if (data.statistics && data.statistics.length) {
+            data.statistics.slice().reverse().forEach(name => {
+                const row = document.createElement('div');
+                row.className = 'flex items-center justify-between p-2 bg-gray-50 rounded';
+                const left = document.createElement('div');
+                left.className = 'text-sm text-gray-800';
+                left.textContent = name;
+                const right = document.createElement('div');
+                const viewBtn = document.createElement('button');
+                viewBtn.className = 'text-sm bg-blue-600 text-white px-3 py-1 rounded';
+                viewBtn.textContent = 'Voir JSON';
+                viewBtn.onclick = async () => {
+                    await showJson(name);
+                };
+                const dlBtn = document.createElement('a');
+                dlBtn.className = 'ml-2 text-sm text-gray-600';
+                dlBtn.href = `${API_BASE}/api/download?category=statistics&name=${encodeURIComponent(name)}`;
+                dlBtn.textContent = 'Télécharger';
+                dlBtn.target = '_blank';
+                right.appendChild(viewBtn);
+                right.appendChild(dlBtn);
+                row.appendChild(left);
+                row.appendChild(right);
+                list.appendChild(row);
+            });
+        } else {
+            list.innerHTML = '<div class="text-sm text-gray-500">Aucun fichier de statistiques trouvé.</div>';
+        }
+        statsSection.appendChild(list);
+        wrapper.appendChild(statsSection);
+
+        // General files (CSV etc.)
+        const genSection = document.createElement('div');
+        const genTitle = document.createElement('h5');
+        genTitle.className = 'font-semibold mb-3';
+        genTitle.textContent = 'Autres Fichiers';
+        genSection.appendChild(genTitle);
+        const genList = document.createElement('div');
+        genList.className = 'space-y-2';
+        if (data.general && data.general.length) {
+            data.general.slice().reverse().forEach(name => {
+                const row = document.createElement('div');
+                row.className = 'flex items-center justify-between p-2 bg-gray-50 rounded';
+                const left = document.createElement('div');
+                left.className = 'text-sm text-gray-800';
+                left.textContent = name;
+                const right = document.createElement('div');
+                const dl = document.createElement('a');
+                dl.className = 'text-sm text-gray-600';
+                dl.href = `${API_BASE}/api/download?category=general&name=${encodeURIComponent(name)}`;
+                dl.target = '_blank';
+                dl.textContent = 'Télécharger';
+                right.appendChild(dl);
+                row.appendChild(left);
+                row.appendChild(right);
+                genList.appendChild(row);
+            });
+        } else {
+            genList.innerHTML = '<div class="text-sm text-gray-500">Aucun fichier trouvé.</div>';
+        }
+        genSection.appendChild(genList);
+        wrapper.appendChild(genSection);
+
+        resultsArea.innerHTML = '';
+        resultsArea.appendChild(wrapper);
+    } catch (err) {
+        resultsArea.innerHTML = '<div class="text-red-600">Erreur lors de la récupération des résultats. Assurez-vous que l\'API est démarrée (`make run-api`).</div>';
+        console.error('fetchResults error', err);
+    }
+}
+
+
+async function fetchInputFiles() {
+    try {
+        const res = await fetch(`${API_BASE}/api/input-files`);
+        const data = await res.json();
+        const sel = document.getElementById('inputFileSelect');
+        sel.innerHTML = '';
+        if (data.files && data.files.length) {
+            data.files.forEach(f => {
+                const opt = document.createElement('option');
+                opt.value = f;
+                opt.textContent = f;
+                sel.appendChild(opt);
+            });
+        } else {
+            const opt = document.createElement('option');
+            opt.textContent = 'Aucun fichier trouvé';
+            sel.appendChild(opt);
+        }
+    } catch (err) {
+        console.error('fetchInputFiles error', err);
+        const sel = document.getElementById('inputFileSelect');
+        sel.innerHTML = '<option>Erreur</option>';
+    }
+}
+
+
+async function triggerAnalysis() {
+    const sel = document.getElementById('inputFileSelect');
+    const file = sel.value;
+    const analysis = document.getElementById('analysisType').value;
+    const statusDiv = document.getElementById('jobStatus');
+    if (!file || file === 'Aucun fichier trouvé' || file === 'Chargement...') {
+        statusDiv.textContent = 'Veuillez sélectionner un fichier d\'entrée valide.';
+        return;
+    }
+    statusDiv.textContent = 'Démarrage du job...';
+    try {
+        const res = await fetch(`${API_BASE}/api/trigger`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({filename: file, analysis: analysis})
+        });
+        const data = await res.json();
+        if (res.ok && data.job_id) {
+            statusDiv.innerHTML = `Job démarré: <strong>${data.job_id}</strong>`;
+            // Start polling
+            pollJobStatus(data.job_id);
+        } else {
+            statusDiv.textContent = `Erreur: ${data.error || data.detail || 'unknown'}`;
+        }
+    } catch (err) {
+        console.error('triggerAnalysis error', err);
+        statusDiv.textContent = 'Erreur lors du démarrage du job. Vérifiez que l\'API est démarrée.';
+    }
+}
+
+
+async function pollJobStatus(job_id) {
+    const statusDiv = document.getElementById('jobStatus');
+    const logsDivId = `jobLogs-${job_id}`;
+    // create logs container
+    let logsDiv = document.getElementById(logsDivId);
+    if (!logsDiv) {
+        logsDiv = document.createElement('pre');
+        logsDiv.id = logsDivId;
+        logsDiv.className = 'mt-3 text-xs bg-gray-100 p-3 rounded code-font max-h-48 overflow-auto';
+        statusDiv.parentNode.appendChild(logsDiv);
+    }
+
+    let finished = false;
+    const poll = setInterval(async () => {
+        try {
+            const res = await fetch(`${API_BASE}/api/job/${encodeURIComponent(job_id)}`);
+            const info = await res.json();
+            if (info.error) {
+                statusDiv.textContent = `Erreur: ${info.error}`;
+                clearInterval(poll);
+                return;
+            }
+            statusDiv.innerHTML = `Job <strong>${job_id}</strong>: ${info.status}`;
+
+            // Fetch logs
+            const lres = await fetch(`${API_BASE}/api/job/${encodeURIComponent(job_id)}/logs`);
+            const logs = await lres.json();
+            if (logs.log) {
+                logsDiv.textContent = logs.log;
+                logsDiv.scrollTop = logsDiv.scrollHeight;
+            }
+
+            if (info.status === 'finished' || info.status === 'failed') {
+                finished = true;
+                clearInterval(poll);
+                // Refresh results list when finished
+                fetchResults();
+                statusDiv.innerHTML += ' — terminé';
+            }
+        } catch (err) {
+            console.error('pollJobStatus error', err);
+            statusDiv.textContent = 'Erreur lors de la récupération du statut du job.';
+            clearInterval(poll);
+        }
+    }, 2000);
+}
+
+async function showJson(name) {
+    const modalId = 'jsonModal';
+    // Create a simple modal to display JSON
+    let modal = document.getElementById(modalId);
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = modalId;
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        const inner = document.createElement('div');
+        inner.className = 'bg-white w-11/12 md:w-3/4 p-6 rounded-lg overflow-auto max-h-[80vh]';
+        inner.id = modalId + '-inner';
+        modal.appendChild(inner);
+        document.body.appendChild(modal);
+        modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+    }
+    const inner = document.getElementById(modalId + '-inner');
+    inner.innerHTML = '<div class="text-sm text-gray-600">Chargement...</div>';
+    try {
+        const res = await fetch(`${API_BASE}/api/results/file?category=statistics&name=${encodeURIComponent(name)}`);
+        const data = await res.json();
+        const pre = document.createElement('pre');
+        pre.className = 'text-xs bg-gray-100 p-3 rounded overflow-auto code-font';
+        pre.textContent = JSON.stringify(data, null, 2);
+        inner.innerHTML = '';
+        const title = document.createElement('div');
+        title.className = 'flex justify-between items-center mb-3';
+        const t = document.createElement('h4');
+        t.className = 'font-semibold';
+        t.textContent = name;
+        const close = document.createElement('button');
+        close.className = 'text-sm text-gray-600';
+        close.textContent = 'Fermer';
+        close.onclick = () => modal.remove();
+        title.appendChild(t);
+        title.appendChild(close);
+        inner.appendChild(title);
+        inner.appendChild(pre);
+    } catch (err) {
+        inner.innerHTML = '<div class="text-red-600">Impossible de charger le fichier JSON.</div>';
+        console.error('showJson error', err);
+    }
+}
 
 function initializeCharts() {
     // Graphique de comparaison des frameworks

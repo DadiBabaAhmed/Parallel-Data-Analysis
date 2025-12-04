@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Cluster Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 16px; }
+    .node-grid { display:flex; gap:12px; flex-wrap:wrap; }
+    .node-card { border:1px solid #ddd; padding:12px; width:280px; border-radius:6px; }
+    #node-monitor { width:100%; height:500px; border:1px solid #ccc; margin-top:12px; }
+    .status-up { color: green; }
+    .status-down { color: red; }
+  </style>
+</head>
+<body>
+  <h1>Cluster Dashboard</h1>
+  <div>
+    <button id="refresh-nodes">Refresh Nodes</button>
+    <span id="nodes-last-refresh"></span>
+  </div>
+
+  <div id="nodes-list" class="node-grid"></div>
+
+  <h2>Embedded Node Monitor</h2>
+  <!-- If cross-origin prevents iframing, consider building a server-side proxy endpoint -->
+  <iframe id="node-monitor" name="node-iframe" src=""></iframe>
+
+  <script>
+    // You may set API_BASE and API_TOKEN here if required:
+    // window.API_BASE = ''; // example: 'http://master:5000'
+    // window.API_TOKEN = '...';
+  </script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

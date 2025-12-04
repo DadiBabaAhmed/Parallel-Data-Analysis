@@ -167,6 +167,11 @@ monitor:
 	@echo "Monitoring cluster resources (press Ctrl+C to stop)..."
 	@watch -n 2 'docker stats --no-stream'
 
+# Run the lightweight Flask API to serve results to the website
+run-api:
+	@echo "Starting Flask API (serves results) on port 5000..."
+	python3 web_api.py
+
 # Backup results
 backup:
 	@echo "Creating backup of results..."
