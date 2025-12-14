@@ -1,0 +1,11 @@
+{
+  "id": "20251204163251-3c1d0657",
+  "filename": "StudentsPerformance.csv",
+  "analysis": "full",
+  "status": "finished",
+  "created_at": "2025-12-04T16:32:51.618542Z",
+  "log": "output/jobs/20251204163251-3c1d0657.log",
+  "started_at": "2025-12-04T16:32:51.622156Z",
+  "finished_at": "2025-12-04T16:33:19.068533Z",
+  "exit_code": 0
+}

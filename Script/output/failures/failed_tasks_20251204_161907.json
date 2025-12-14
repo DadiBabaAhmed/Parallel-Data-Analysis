@@ -1,0 +1,16 @@
+[
+    {
+        "timestamp": "2025-12-04T16:19:27.697678",
+        "component": "Statistical Analysis",
+        "error": "\n[PARSE_SYNTAX_ERROR] Syntax error at or near 'score'.(line 1, pos 23)\n\n== SQL ==\npercentile_approx(math score, 0.25)\n-----------------------^^^\n",
+        "traceback": "Traceback (most recent call last):\n  File \"/app/src/data_analyzer.py\", line 38, in statistical_analysis\n    col_stats = self._column_statistics(df, col)\n  File \"/app/src/data_analyzer.py\", line 54, in _column_statistics\n    F.expr(f'percentile_approx({column}, 0.25)').alias('q1'),\n  File \"/opt/spark/python/pyspark/sql/utils.py\", line 174, in wrapped\n    return f(*args, **kwargs)\n  File \"/opt/spark/python/pyspark/sql/functions.py\", line 5054, in expr\n    return _invoke_function(\"expr\", str)\n  File \"/opt/spark/python/pyspark/sql/functions.py\", line 97, in _invoke_function\n    return Column(jf(*args))\n  File \"/opt/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py\", line 1322, in __call__\n    return_value = get_return_value(\n  File \"/opt/spark/python/pyspark/errors/exceptions/captured.py\", line 185, in deco\n    raise converted from None\npyspark.errors.exceptions.captured.ParseException: \n[PARSE_SYNTAX_ERROR] Syntax error at or near 'score'.(line 1, pos 23)\n\n== SQL ==\npercentile_approx(math score, 0.25)\n-----------------------^^^\n\n",
+        "additional_info": null
+    },
+    {
+        "timestamp": "2025-12-04T16:19:27.727274",
+        "component": "Analysis Pipeline",
+        "error": "\n[PARSE_SYNTAX_ERROR] Syntax error at or near 'score'.(line 1, pos 23)\n\n== SQL ==\npercentile_approx(math score, 0.25)\n-----------------------^^^\n",
+        "traceback": "Traceback (most recent call last):\n  File \"/app/src/main.py\", line 96, in run_analysis\n    results['statistics'] = self.analyzer.statistical_analysis(df)\n  File \"/app/src/data_analyzer.py\", line 38, in statistical_analysis\n    col_stats = self._column_statistics(df, col)\n  File \"/app/src/data_analyzer.py\", line 54, in _column_statistics\n    F.expr(f'percentile_approx({column}, 0.25)').alias('q1'),\n  File \"/opt/spark/python/pyspark/sql/utils.py\", line 174, in wrapped\n    return f(*args, **kwargs)\n  File \"/opt/spark/python/pyspark/sql/functions.py\", line 5054, in expr\n    return _invoke_function(\"expr\", str)\n  File \"/opt/spark/python/pyspark/sql/functions.py\", line 97, in _invoke_function\n    return Column(jf(*args))\n  File \"/opt/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py\", line 1322, in __call__\n    return_value = get_return_value(\n  File \"/opt/spark/python/pyspark/errors/exceptions/captured.py\", line 185, in deco\n    raise converted from None\npyspark.errors.exceptions.captured.ParseException: \n[PARSE_SYNTAX_ERROR] Syntax error at or near 'score'.(line 1, pos 23)\n\n== SQL ==\npercentile_approx(math score, 0.25)\n-----------------------^^^\n\n",
+        "additional_info": null
+    }
+]

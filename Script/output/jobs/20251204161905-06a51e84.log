@@ -1,0 +1,58 @@
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+25/12/04 16:19:11 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+[Stage 0:>                                                          (0 + 1) / 1]                                                                                [Stage 2:>                                                          (0 + 1) / 1]                                                                                [Stage 5:>                                                          (0 + 1) / 1]                                                                                2025-12-04 16:19:27 - ParallelDataAnalysis - ERROR - [Statistical Analysis] 
+[PARSE_SYNTAX_ERROR] Syntax error at or near 'score'.(line 1, pos 23)
+
+== SQL ==
+percentile_approx(math score, 0.25)
+-----------------------^^^
+
+2025-12-04 16:19:27 - ParallelDataAnalysis - ERROR - [Analysis Pipeline] 
+[PARSE_SYNTAX_ERROR] Syntax error at or near 'score'.(line 1, pos 23)
+
+== SQL ==
+percentile_approx(math score, 0.25)
+-----------------------^^^
+
+Traceback (most recent call last):
+  File "/opt/conda/envs/pda/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/opt/conda/envs/pda/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/app/src/main.py", line 191, in <module>
+    main()
+  File "/app/src/main.py", line 187, in main
+    analyzer.run_analysis(args.input, args.analysis)
+  File "/app/src/main.py", line 96, in run_analysis
+    results['statistics'] = self.analyzer.statistical_analysis(df)
+  File "/app/src/data_analyzer.py", line 38, in statistical_analysis
+    col_stats = self._column_statistics(df, col)
+  File "/app/src/data_analyzer.py", line 54, in _column_statistics
+    F.expr(f'percentile_approx({column}, 0.25)').alias('q1'),
+  File "/opt/spark/python/pyspark/sql/utils.py", line 174, in wrapped
+    return f(*args, **kwargs)
+  File "/opt/spark/python/pyspark/sql/functions.py", line 5054, in expr
+    return _invoke_function("expr", str)
+  File "/opt/spark/python/pyspark/sql/functions.py", line 97, in _invoke_function
+    return Column(jf(*args))
+  File "/opt/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1322, in __call__
+  File "/opt/spark/python/pyspark/errors/exceptions/captured.py", line 185, in deco
+    raise converted from None
+pyspark.errors.exceptions.captured.ParseException: 
+[PARSE_SYNTAX_ERROR] Syntax error at or near 'score'.(line 1, pos 23)
+
+== SQL ==
+percentile_approx(math score, 0.25)
+-----------------------^^^
+
+
+============================================================
+Starting Parallel Data Analysis - 20251204_161907
+============================================================
+
+Step 1: Loading data...
+✓ Loaded 1000 records
+
+Step 2: Performing analysis...
+  - Statistical analysis...

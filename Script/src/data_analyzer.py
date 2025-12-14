@@ -51,9 +51,9 @@ class DataAnalyzer:
             F.stddev(column).alias('stddev'),
             F.min(column).alias('min'),
             F.max(column).alias('max'),
-            F.expr(f'percentile_approx({column}, 0.25)').alias('q1'),
-            F.expr(f'percentile_approx({column}, 0.5)').alias('median'),
-            F.expr(f'percentile_approx({column}, 0.75)').alias('q3'),
+            F.expr(f'percentile_approx(`{column}`, 0.25)').alias('q1'),
+            F.expr(f'percentile_approx(`{column}`, 0.5)').alias('median'),
+            F.expr(f'percentile_approx(`{column}`, 0.75)').alias('q3'),
             F.count(column).alias('count'),
             F.sum(F.when(F.col(column).isNull(), 1).otherwise(0)).alias('null_count')
         ).collect()[0]

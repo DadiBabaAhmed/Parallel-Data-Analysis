@@ -141,6 +141,32 @@ services:
       /opt/spark/sbin/start-worker.sh spark://spark-master:7077 &&
       tail -f /opt/spark/logs/*
       "
+  web_api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: pda-web-api:latest
+    container_name: pda-web-api
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/app/data:delegated
+      - ./output:/app/output:delegated
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./src:/app/src:delegated
+      - ./api:/app/api:delegated
+    depends_on:
+      - spark-master
+    networks:
+      - spark-network
+    environment:
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s    
 
 networks:
   spark-network:

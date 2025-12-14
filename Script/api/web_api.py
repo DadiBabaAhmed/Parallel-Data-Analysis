@@ -8,12 +8,19 @@ import json
 from flask import Flask, jsonify, send_from_directory, abort, request
 from flask_cors import CORS
 import uuid
-import subprocess
 import threading
 import time
 from datetime import datetime
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# New import for Docker SDK
+try:
+    import docker
+    DOCKER_AVAILABLE = True
+except Exception:
+    docker = None
+    DOCKER_AVAILABLE = False
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUTPUT_DIR = os.path.join(BASE_DIR, 'output')
 GENERAL_DIR = os.path.join(OUTPUT_DIR, 'general')
 GRAPHS_DIR = os.path.join(GENERAL_DIR, 'graphs')
@@ -45,23 +52,6 @@ def safe_input_filename(name: str) -> bool:
     return safe_filename(name) and os.path.basename(name) == name
 
 
-def monitor_process(job_id, proc, log_path):
-    try:
-        JOBS[job_id]['status'] = 'running'
-        JOBS[job_id]['pid'] = proc.pid
-        JOBS[job_id]['started_at'] = datetime.utcnow().isoformat() + 'Z'
-        persist_job(job_id)
-        # Wait for process to complete
-        ret = proc.wait()
-        JOBS[job_id]['finished_at'] = datetime.utcnow().isoformat() + 'Z'
-        JOBS[job_id]['exit_code'] = ret
-        JOBS[job_id]['status'] = 'finished' if ret == 0 else 'failed'
-        persist_job(job_id)
-    except Exception as e:
-        JOBS[job_id]['status'] = 'failed'
-        JOBS[job_id]['error'] = str(e)
-        persist_job(job_id)
-
 app = Flask(__name__)
 CORS(app)
 
@@ -81,6 +71,75 @@ def safe_filename(name: str) -> bool:
     if '..' in name or name.startswith('/') or name.startswith('\\'):
         return False
     return True
+
+
+# Docker client initialization (if available & socket mounted)
+DOCKER_CLIENT = None
+if DOCKER_AVAILABLE:
+    try:
+        DOCKER_CLIENT = docker.from_env()
+    except Exception:
+        DOCKER_CLIENT = None
+
+
+def stream_exec_and_monitor(job_id, container_name, exec_cmd, log_path):
+    """
+    Use the Docker API to create an exec instance inside container_name and stream output to log_path.
+    Update JOBS[job_id] status (running -> finished/failed) and exit code.
+    """
+    JOBS[job_id]['status'] = 'running'
+    JOBS[job_id]['started_at'] = datetime.utcnow().isoformat() + 'Z'
+    persist_job(job_id)
+
+    if DOCKER_CLIENT is None:
+        # Fallback: attempt to run command locally (this will generally fail in containerized setups)
+        JOBS[job_id]['status'] = 'failed'
+        JOBS[job_id]['error'] = 'docker client not available'
+        persist_job(job_id)
+        return
+
+    try:
+        container = None
+        try:
+            container = DOCKER_CLIENT.containers.get(container_name)
+        except Exception as e_get:
+            JOBS[job_id]['status'] = 'failed'
+            JOBS[job_id]['error'] = f'container not found: {container_name} ({e_get})'
+            persist_job(job_id)
+            return
+
+        # Create exec
+        api_client = DOCKER_CLIENT.api
+        exec_obj = api_client.exec_create(container.id, exec_cmd, tty=False)
+        exec_id = exec_obj.get('Id')
+
+        # Stream output
+        stream = api_client.exec_start(exec_id, stream=True, demux=False)
+        with open(log_path, 'wb') as fh:
+            try:
+                for chunk in stream:
+                    if isinstance(chunk, bytes):
+                        fh.write(chunk)
+                    else:
+                        # some SDKs yield str
+                        fh.write(str(chunk).encode('utf-8', errors='ignore'))
+                    fh.flush()
+            except Exception:
+                # stream may raise on disconnect; we'll inspect exit code afterwards
+                pass
+
+        # Inspect to get exit code
+        info = api_client.exec_inspect(exec_id)
+        exit_code = info.get('ExitCode', None)
+        JOBS[job_id]['finished_at'] = datetime.utcnow().isoformat() + 'Z'
+        JOBS[job_id]['exit_code'] = exit_code
+        JOBS[job_id]['status'] = 'finished' if exit_code == 0 else 'failed'
+        persist_job(job_id)
+    except Exception as e:
+        JOBS[job_id]['status'] = 'failed'
+        JOBS[job_id]['error'] = str(e)
+        JOBS[job_id]['finished_at'] = datetime.utcnow().isoformat() + 'Z'
+        persist_job(job_id)
 
 
 @app.route('/api/hosts')
@@ -126,13 +185,14 @@ def api_trigger():
     filename = payload.get('filename')
     analysis = payload.get('analysis', 'full')
     master = payload.get('master', 'spark://spark-master:7077')
+    container_name = payload.get('container', 'spark-master')
 
     if not filename or not safe_input_filename(filename):
         return jsonify({'error': 'invalid filename'}), 400
     if analysis not in ['full', 'statistical', 'aggregation']:
         return jsonify({'error': 'invalid analysis type'}), 400
 
-    # Check input file exists in the mounted data/input directory
+    # Check input file exists in the mounted data/input directory (host path)
     host_input_path = os.path.join(BASE_DIR, 'data', 'input', filename)
     if not os.path.exists(host_input_path):
         return jsonify({'error': 'file not found'}), 404
@@ -149,31 +209,58 @@ def api_trigger():
     }
     persist_job(job_id)
 
-    # Build docker exec command to run analysis inside spark-master container
+    # Build the command we want executed inside the spark-master container
     container_input_path = f"/app/data/input/{filename}"
-    cmd = [
-        'docker', 'exec', '-i', 'spark-master',
+    exec_cmd = [
         '/opt/conda/envs/pda/bin/python', '-m', 'src.main',
         '--input', container_input_path,
         '--master', master,
         '--analysis', analysis
     ]
 
-    # Start process and redirect output to log file
+    # If DOCKER_CLIENT available, use Docker SDK to exec, stream logs and monitor.
+    if DOCKER_CLIENT:
+        t = threading.Thread(
+            target=stream_exec_and_monitor,
+            args=(job_id, container_name, exec_cmd, log_path),
+            daemon=True
+        )
+        t.start()
+        return jsonify({'job_id': job_id, 'status': JOBS[job_id]['status']})
+
+    # Fallback: try to run a local subprocess (non-containerized, original approach).
     try:
+        # original subprocess approach (only works if docker CLI is available & permitted)
+        import subprocess
+        cmd = [
+            'docker', 'exec', '-i', container_name
+        ] + exec_cmd
         log_fh = open(log_path, 'wb')
         proc = subprocess.Popen(cmd, stdout=log_fh, stderr=subprocess.STDOUT)
+        # Monitor in background thread using a simple monitor that checks proc
+        def monitor_process_local(job_id, proc, log_path):
+            try:
+                JOBS[job_id]['status'] = 'running'
+                JOBS[job_id]['pid'] = proc.pid
+                JOBS[job_id]['started_at'] = datetime.utcnow().isoformat() + 'Z'
+                persist_job(job_id)
+                ret = proc.wait()
+                JOBS[job_id]['finished_at'] = datetime.utcnow().isoformat() + 'Z'
+                JOBS[job_id]['exit_code'] = ret
+                JOBS[job_id]['status'] = 'finished' if ret == 0 else 'failed'
+                persist_job(job_id)
+            except Exception as e:
+                JOBS[job_id]['status'] = 'failed'
+                JOBS[job_id]['error'] = str(e)
+                persist_job(job_id)
+        t = threading.Thread(target=monitor_process_local, args=(job_id, proc, log_path), daemon=True)
+        t.start()
+        return jsonify({'job_id': job_id, 'status': JOBS[job_id]['status']})
     except Exception as e:
         JOBS[job_id]['status'] = 'failed'
         JOBS[job_id]['error'] = str(e)
         persist_job(job_id)
         return jsonify({'error': 'failed to start job', 'detail': str(e)}), 500
-
-    # Monitor process in background thread
-    t = threading.Thread(target=monitor_process, args=(job_id, proc, log_path), daemon=True)
-    t.start()
-
-    return jsonify({'job_id': job_id, 'status': JOBS[job_id]['status']})
 
 
 @app.route('/api/jobs')
