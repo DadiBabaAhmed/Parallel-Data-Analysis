@@ -223,7 +223,7 @@ Fails: Continues even if issues found (for visibility)
 
 ### Running CI Checks Locally
 
-Before pushing, run checks on your machine:
+Run the checks locally before pushing:
 
 ```bash
 # Install dev dependencies
@@ -465,5 +465,5 @@ After implementing, verify:
 
 **Status:** ✅ **COMPLETE**
 
-Health checks and CI/CD pipeline are now active and monitoring your deployments!
+Health checks and the CI/CD pipeline are now active and monitoring deployments.
 

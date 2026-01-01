@@ -1,0 +1,15 @@
+# Ignore generated outputs and IDE settings
+/output/
+/.idea/
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+env/
+
+# OS files
+.DS_Store
+Thumbs.db

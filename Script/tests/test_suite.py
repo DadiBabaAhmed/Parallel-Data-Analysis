@@ -1,23 +1,78 @@
-#!/usr/bin/env python3
 """
-Comprehensive testing suite for the Parallel Data Analysis project.
-Tests: docker-compose setup, API endpoints, website integration
+Complete test suite for Parallel Data Analysis Framework
+Includes unit tests, integration tests, and end-to-end tests
+
+Run with: pytest tests/ -v
+Run with coverage: pytest tests/ --cov=src --cov-report=html
+Run specific tests: pytest tests/test_data_loader.py::TestDataLoaderCSV::test_load_csv_basic -v
 """
 
-import subprocess
-import json
-import time
-import requests
+import pytest
 import sys
-from pathlib import Path
+import os
 
-# Configuration
-API_BASE = "http://localhost:5000"
-DOCKER_COMPOSE_DIR = Path(__file__).parent / "Script"
-TIMEOUT = 30
+# Add parent directory to path for imports
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-class TestRunner:
-    def __init__(self):
+
+def pytest_configure(config):
+    """Configure pytest with custom markers"""
+    config.addinivalue_line(
+        "markers", "unit: mark test as a unit test"
+    )
+    config.addinivalue_line(
+        "markers", "integration: mark test as an integration test"
+    )
+    config.addinivalue_line(
+        "markers", "smoke: mark test as a smoke test"
+    )
+    config.addinivalue_line(
+        "markers", "performance: mark test as a performance test"
+    )
+    config.addinivalue_line(
+        "markers", "docker: mark test as requiring Docker"
+    )
+
+
+def pytest_collection_modifyitems(config, items):
+    """
+    Automatically assign markers to tests based on file names
+    """
+    for item in items:
+        # Mark API tests
+        if "test_api" in str(item.fspath):
+            item.add_marker(pytest.mark.integration)
+        
+        # Mark loader tests
+        elif "test_data_loader" in str(item.fspath):
+            item.add_marker(pytest.mark.unit)
+        
+        # Mark analyzer tests
+        elif "test_analyzer" in str(item.fspath):
+            item.add_marker(pytest.mark.unit)
+        
+        # Mark graph tests
+        elif "test_graphs" in str(item.fspath):
+            item.add_marker(pytest.mark.unit)
+        
+        # Mark main/smoke tests
+        elif "test_main_smoke" in str(item.fspath):
+            item.add_marker(pytest.mark.smoke)
+
+
+# Test summary and collection
+def pytest_sessionfinish(session, exitstatus):
+    """Print test summary after all tests"""
+    print("\n" + "="*70)
+    print("TEST SUITE EXECUTION COMPLETED")
+    print("="*70)
+    print(f"Exit Status: {exitstatus}")
+    print("="*70 + "\n")
+
+
+if __name__ == '__main__':
+    # Allow running pytest programmatically
+    pytest.main([__file__, '-v', '--tb=short'])
         self.passed = 0
         self.failed = 0
         self.errors = []

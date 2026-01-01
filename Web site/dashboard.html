@@ -1,95 +1,108 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <title>Analysis Dashboard</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 16px; }
-    .controls { margin-bottom: 12px; }
-    #analysis-status { margin-left: 12px; }
-  </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Parallel Data Analysis — Complete Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+        .gradient-text { background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .code-block { background: #1f2937; color: #e5e7eb; padding: 12px; border-radius: 6px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 13px; }
+        .section-title { scroll-margin-top: 90px; }
+        .toc-sticky { position: sticky; top: 90px; }
+    </style>
 </head>
-<body>
-  <h1>Analysis Dashboard</h1>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-xl font-bold gradient-text">DataParallèle</a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="index.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Accueil</a>
+                        <a href="dashboard.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Dashboard</a>
+                        <a href="algorithmes.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Algorithmes</a>
+                        <a href="performances.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Performances</a>
+                        <a href="documentation.html" class="text-blue-600 px-3 py-2 text-sm font-medium">Documentation</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <section class="bg-gradient-to-br from-green-50 to-blue-50 pt-16 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center py-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                    Dashboard d'<span class="gradient-text">Analyse de Données</span>
+                </h1>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Utilisez ce tableau de bord pour lancer des analyses sur vos fichiers de données et visualiser les résultats.
+                </p>
+            </div>
+        </div>
+    </section>
+        <!-- Cluster & Results Section -->
+    <section id="cluster" class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-6">
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Cluster & Résultats</h2>
+                <p class="text-gray-600">Accédez aux interfaces des conteneurs et visualisez les résultats générés.</p>
+            </div>
 
-  <div class="controls">
-    <label for="input-file">Input file:</label>
-    <select id="input-file"></select>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-gray-50 rounded-xl p-6">
+                    <h4 class="font-semibold mb-4">Conteneurs</h4>
+                    <div id="hostsList" class="space-y-2 text-sm text-gray-700">
+                        <!-- Filled by JS -->
+                        <div>Loading hosts...</div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Fichier d'entrée</label>
+                        <select id="inputFileSelect" class="w-full p-2 border border-gray-300 rounded mb-3">
+                            <option>Chargement...</option>
+                        </select>
 
-    <label for="analysis-type">Analysis:</label>
-    <select id="analysis-type">
-      <option value="full">full</option>
-      <option value="statistical">statistical</option>
-      <option value="aggregation">aggregation</option>
-    </select>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Type d'analyse</label>
+                        <select id="analysisType" class="w-full p-2 border border-gray-300 rounded mb-3">
+                            <option value="full">Full</option>
+                            <option value="aggregation">Aggregation</option>
+                            <option value="statistical">Statistical</option>
+                        </select>
 
-    <button id="start-analysis">Start</button>
-    <span id="analysis-status"></span>
-  </div>
+                        <div class="flex space-x-2">
+                            <button id="triggerBtn" onclick="triggerAnalysis()" class="bg-green-600 text-white px-4 py-2 rounded-lg">Lancer l'analyse</button>
+                            <button onclick="fetchResults()" class="bg-blue-600 text-white px-4 py-2 rounded-lg">Rafraîchir Résultats</button>
+                        </div>
+                        <div id="jobStatus" class="mt-3 text-sm text-gray-600"></div>
+                    </div>
+                </div>
 
-  <div id="analysis-summary"></div>
-  <canvas id="analysis-timeseries" width="900" height="300"></canvas>
-  <canvas id="analysis-histogram" width="600" height="250"></canvas>
+                <div class="bg-white rounded-xl p-6 md:col-span-2">
+                    <h4 class="font-semibold mb-4">Résultats Récents</h4>
+                    <div id="resultsArea">
+                        <p class="text-sm text-gray-500">Aucun résultat affiché. Cliquez sur "Rafraîchir Résultats".</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <script>
-    // small helper to call your API
-    async function apiFetch(path, opts) {
-      const res = await fetch(path, opts || {});
-      if (!res.ok) throw new Error('API error ' + res.status);
-      return res.json();
-    }
-
-    async function loadInputFiles() {
-      try {
-        const data = await apiFetch('/api/input-files');
-        const sel = document.getElementById('input-file');
-        sel.innerHTML = '';
-        (data.files || []).forEach(f => {
-          const opt = document.createElement('option');
-          opt.value = f; opt.textContent = f;
-          sel.appendChild(opt);
-        });
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    document.getElementById('start-analysis').addEventListener('click', async () => {
-      const filename = document.getElementById('input-file').value;
-      const analysis = document.getElementById('analysis-type').value;
-      const statusEl = document.getElementById('analysis-status');
-      try {
-        statusEl.textContent = 'Starting...';
-        const r = await apiFetch('/api/trigger', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({filename, analysis})
-        });
-        const jobId = r.job_id;
-        statusEl.textContent = 'Job queued: ' + jobId;
-        // poll status
-        const poll = setInterval(async () => {
-          const s = await apiFetch('/api/job/' + jobId);
-          statusEl.textContent = 'Job ' + jobId + ': ' + s.status;
-          if (s.status === 'finished' || s.status === 'failed') {
-            clearInterval(poll);
-            // fetch logs & results if finished
-            if (s.status === 'finished') {
-              // example: load result JSON if available at /api/results/file?category=general&name=...
-              // adapt to your result filenames
-              statusEl.textContent = 'Job finished';
-            } else {
-              statusEl.textContent = 'Job failed';
-            }
-          }
-        }, 2000);
-      } catch (e) {
-        statusEl.textContent = 'Error: ' + e.message;
-      }
-    });
-
-    window.addEventListener('load', loadInputFiles);
-  </script>
+     <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h3 class="text-2xl font-bold gradient-text mb-4">DataParallèle</h3>
+                <p class="text-gray-400 mb-4">Projet d'analyse de données parallèle - Algorithmes et implémentations</p>
+                <p class="text-sm text-gray-500">© 2025 Projet DataParallèle. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+  <script src="main.js"></script>
 </body>
 </html>

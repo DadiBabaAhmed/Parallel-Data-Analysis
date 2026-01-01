@@ -87,7 +87,7 @@ cat docs/HEALTH_CHECKS_CI_CD_GUIDE.md
 ### Before
 ```bash
 $ docker-compose ps
-# Shows: Up, Up, Up, Up (you don't know if they're actually working)
+# Shows: Up, Up, Up, Up (status labels alone do not indicate readiness)
 ```
 
 ### After
@@ -101,7 +101,7 @@ $ docker-compose ps
 
 ## 🧪 CI/CD Pipeline Stages
 
-When you push code to GitHub:
+On push to GitHub:
 
 ```
 1. Code Quality ───→ Linting & formatting ✓
@@ -135,14 +135,14 @@ MODIFIED:
 
 ## ❓ FAQ
 
-**Q: Do I need to do anything?**  
-A: No! Everything is automatic now. Just push code and CI/CD runs.
+**Q: Is any action required?**  
+A: No. The pipeline runs automatically on push; no manual steps are required to trigger it.
 
 **Q: What if a container becomes unhealthy?**  
-A: You'll see it in `docker-compose ps`. Check logs with `docker-compose logs spark-master`.
+A: The status appears in `docker-compose ps`. Check logs with `docker-compose logs spark-master`.
 
-**Q: How do I run CI checks locally?**  
-A: `make ci-test` (if you install dev dependencies first)
+**Q: How can CI checks be run locally?**  
+A: Use `make ci-test` after installing development dependencies where applicable.
 
 **Q: Will this slow down my analysis?**  
 A: No! Health checks run in background (~0.1% CPU overhead).

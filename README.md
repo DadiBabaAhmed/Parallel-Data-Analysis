@@ -69,13 +69,13 @@ git clone <repository-url>
 cd parallel-data-analysis/Script
 ```
 
-### 2. Prepare Your Data
+### 2. Prepare input data
 
-Place your data files in `data/input/`:
+Place input data files in `data/input/`:
 
 ```bash
 mkdir -p data/input
-cp your_data.csv data/input/
+cp example_data.csv data/input/
 ```
 
 ### 3. Start the Cluster
@@ -94,7 +94,7 @@ docker ps | findstr spark
 # Run analysis with conda-based Python environment
 docker exec spark-master /opt/conda/envs/pda/bin/python \
   /app/src/main.py \
-  --input /app/data/input/your_data.csv \
+  --input /app/data/input/example_data.csv \
   --master spark://spark-master:7077 \
   --analysis full
 
@@ -168,7 +168,7 @@ make test-health
 - ✅ Master Web UI is responding
 - ✅ Workers are connected and ready
 - ✅ Automatic restart on failure
-- ✅ Better error messages for users
+- ✅ Improved, actionable error messages
 
 See `docs/HEALTH_CHECKS_CI_CD_GUIDE.md` for detailed health check documentation.
 
@@ -475,7 +475,7 @@ make ci-test
 ### Making Changes
 
 1. Create a feature branch
-2. Make your changes
+2. Make the changes
 3. Run `make ci-test` to verify locally
 4. Push to GitHub
 5. CI/CD pipeline runs automatically

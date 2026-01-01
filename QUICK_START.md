@@ -168,7 +168,7 @@ curl -X POST http://localhost:5000/api/trigger \
 - **Spark Worker 2**: http://localhost:8082
 - **Spark Worker 3**: http://localhost:8083
 - **Spark Application**: http://localhost:4040 (during job execution)
-- **Website**: http://localhost:8000 (or your configured port)
+- **Website**: http://localhost:8000 (or the configured port)
 
 ---
 

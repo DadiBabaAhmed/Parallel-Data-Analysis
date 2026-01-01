@@ -167,8 +167,8 @@ A: "Docker ensures reproducibility. Same environment everywhere - no 'works on m
 **Q: How does the web interface talk to Spark?**
 A: "Flask API acts as intermediary. Web sends request to API, API triggers Spark job, returns results when done."
 
-**Q: Can you scale this to bigger datasets?**
-A: "Yes - add more workers in docker-compose.yml. Spark automatically distributes work across all available nodes."
+**Q: Can the system scale to bigger datasets?**
+A: "Yes — add more workers in `docker-compose.yml`. Spark automatically distributes work across available nodes."
 
 **Q: What happens if a worker fails?**
 A: "Spark has built-in fault tolerance. Master reassigns tasks to other workers automatically."
@@ -233,4 +233,4 @@ END
 
 ---
 
-**Good luck with your presentation! All systems are verified and ready to impress! 🚀**
+**Best of luck with the presentation — systems are verified and prepared. 🚀**

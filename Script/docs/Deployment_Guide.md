@@ -100,7 +100,7 @@ make run-analysis  # Run sample analysis
 Edit `config/app_config.yaml`:
 
 ```yaml
-# Adjust based on your needs
+# Adjust parameters to suit the deployment
 cluster:
   mode: "cluster"  # or "local"
   master_url: "spark://spark-master:7077"
@@ -220,7 +220,7 @@ spec:
     spec:
       containers:
       - name: spark-master
-        image: your-registry/parallel-data-analysis:master
+        image: <registry>/parallel-data-analysis:master
         ports:
         - containerPort: 7077
         - containerPort: 8080
@@ -350,7 +350,7 @@ prometheus:
 SPARK_WORKER_MEMORY=4G
 
 # Or reduce data size
-# Use sampling in your code
+# Apply sampling when processing large datasets
 df = df.sample(fraction=0.1)
 ```
 

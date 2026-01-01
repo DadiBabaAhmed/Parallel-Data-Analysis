@@ -453,7 +453,7 @@ Proceed with the following order:
 3. **Enhance Makefile** (improves day-to-day workflow)
 4. **Write Unit Tests** (ensures maintainability)
 
-Each section is independent; you can tackle them in parallel if needed.
+Each section is independent; sections can be tackled in parallel if needed.
 
 ---
 

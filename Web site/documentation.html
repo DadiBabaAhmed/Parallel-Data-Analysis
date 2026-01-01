@@ -1,19 +1,16 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentation Technique - DataParallèle</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Parallel Data Analysis — Complete Documentation</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .code-font { font-family: 'JetBrains Mono', monospace; }
+        body { font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
         .gradient-text { background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .code-block { background: #1f2937; color: #f9fafb; border-radius: 8px; padding: 1rem; overflow-x: auto; }
-        .doc-section { scroll-margin-top: 80px; }
+        .code-block { background: #1f2937; color: #e5e7eb; padding: 12px; border-radius: 6px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 13px; }
+        .section-title { scroll-margin-top: 90px; }
+        .toc-sticky { position: sticky; top: 90px; }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -26,7 +23,8 @@
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-8">
-                        <a href="index.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Accueil</a>
+                        <a href="index.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Accueil</a>
+                        <a href="dashboard.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Dashboard</a>
                         <a href="algorithmes.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Algorithmes</a>
                         <a href="performances.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Performances</a>
                         <a href="documentation.html" class="text-blue-600 px-3 py-2 text-sm font-medium">Documentation</a>
@@ -36,614 +34,750 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-purple-50 to-blue-50 pt-16 pb-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center py-12">
-                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-                    Documentation <span class="gradient-text">Technique</span>
-                </h1>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Guide complet d'installation, configuration et utilisation des frameworks de calcul parallèle
-                </p>
-            </div>
-        </div>
-    </section>
+    <main class="max-w-7xl mx-auto mt-24 px-4 sm:px-6 lg:px-8 pb-12">
+        <header class="bg-white p-8 rounded-lg shadow-md mb-8">
+            <h1 class="text-4xl font-bold mb-3 gradient-text">Parallel Data Analysis Framework</h1>
+            <p class="text-lg text-gray-700">A distributed data analysis framework using Apache Spark 3.5.0 and Docker for large-scale parallel processing.</p>
+            <p class="text-sm text-gray-500 mt-2">Complete documentation consolidated from official guides and implementation details.</p>
+        </header>
 
-    <!-- Table des Matières -->
-    <section class="py-8 bg-white border-b">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-center space-x-8 text-sm">
-                <a href="#installation" class="text-blue-600 hover:text-blue-800 font-medium">Installation</a>
-                <a href="#configuration" class="text-blue-600 hover:text-blue-800 font-medium">Configuration</a>
-                <a href="#utilisation" class="text-blue-600 hover:text-blue-800 font-medium">Utilisation</a>
-                <a href="#api" class="text-blue-600 hover:text-blue-800 font-medium">API Référence</a>
-                <a href="#exemples" class="text-blue-600 hover:text-blue-800 font-medium">Exemples</a>
-            </div>
-        </div>
-    </section>
+        <div class="grid gap-8 lg:grid-cols-4">
+            <!-- Table of Contents (Sticky Sidebar) -->
+            <aside class="lg:col-span-1">
+                <nav class="toc-sticky bg-white p-6 rounded-lg shadow-md max-h-screen overflow-y-auto">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-900">Table of Contents</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#project-structure" class="text-blue-600 hover:underline">1. Project Structure</a></li>
+                        <li><a href="#docker-installation" class="text-blue-600 hover:underline">2. Docker Installation</a></li>
+                        <li><a href="#container-dependencies" class="text-blue-600 hover:underline">3. Container Dependencies</a></li>
+                        <li><a href="#spark-config" class="text-blue-600 hover:underline">4. Spark Configuration</a></li>
+                        <li><a href="#application-operation" class="text-blue-600 hover:underline">5. How the Application Operates</a></li>
+                        <li><a href="#web-api-guide" class="text-blue-600 hover:underline">6. Web API Reference</a></li>
+                        <li><a href="#execution-example" class="text-blue-600 hover:underline">7. Execution Examples</a></li>
+                        <li><a href="#monitoring-troubleshooting" class="text-blue-600 hover:underline">8. Monitoring & Troubleshooting</a></li>
+                    </ul>
+                </nav>
+            </aside>
 
-    <!-- Documentation Principale -->
-    <section class="py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-4 gap-8">
-                <!-- Menu Latéral -->
-                <div class="lg:col-span-1">
-                    <div class="bg-white rounded-xl shadow-lg p-6 sticky top-24">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Navigation</h3>
-                        <nav class="space-y-2">
-                            <a href="#installation" class="block text-sm text-gray-600 hover:text-blue-600 py-1">Installation</a>
-                            <a href="#configuration" class="block text-sm text-gray-600 hover:text-blue-600 py-1">Configuration</a>
-                            <a href="#utilisation" class="block text-sm text-gray-600 hover:text-blue-600 py-1">Utilisation</a>
-                            <a href="#api" class="block text-sm text-gray-600 hover:text-blue-600 py-1">API Référence</a>
-                            <a href="#exemples" class="block text-sm text-gray-600 hover:text-blue-600 py-1">Exemples</a>
-                            <a href="#depannage" class="block text-sm text-gray-600 hover:text-blue-600 py-1">Dépannage</a>
-                        </nav>
+            <!-- Main Content -->
+            <article class="lg:col-span-3 space-y-8">
+
+                <!-- 1. Project Structure -->
+                <section id="project-structure" class="section-title bg-white p-8 rounded-lg shadow-md">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900">1. Project Structure</h2>
+                    
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Core Directory Layout</h3>
+                        <div class="code-block">
+<pre>Script/
+├── src/                      # Main application code
+│   ├── main.py              # Orchestrator & CLI entry point
+│   ├── data_loader.py       # CSV/JSON/Parquet/Avro ingestion
+│   ├── data_analyzer.py     # High-level analysis orchestration
+│   ├── graph_generator.py   # Matplotlib/Seaborn/Plotly visualizations
+│   ├── spark_config.py      # Spark session configuration
+│   ├── performance_monitor.py # Timing & metrics instrumentation
+│   ├── error_handler.py     # Error logging & recovery
+│   └── utils.py             # Helper utilities
+│
+├── spark_jobs/              # Spark job implementations
+│   ├── aggregation_job.py   # Multi-level aggregation, cubes, rollups
+│   ├── mapreduce_job.py     # MapReduce patterns (word count, group sum)
+│   └── statistical_analysis.py # Descriptive stats, correlation, anomaly detection
+│
+├── api/                     # Flask Web API
+│   ├── web_api.py           # REST endpoints for job control & file serving
+│   └── __init__.py          # Package marker
+│
+├── docker/                  # Docker configurations
+│   ├── Dockerfile.master    # Spark Master (with Java 17, Conda)
+│   └── Dockerfile.worker    # Spark Worker (with Java 17, Conda)
+│
+├── config/                  # Configuration files
+│   ├── app_config.yaml      # Application settings
+│   └── environment.yml      # Conda environment specification
+│
+├── data/input/             # Input datasets
+│   ├── sample_sales.csv
+│   ├── spotify_data clean.csv
+│   └── StudentsPerformance.csv
+│
+├── output/                 # Analysis results (timestamped)
+│   ├── general/
+│   │   ├── results_*.csv   # Preview CSV (driver-side sample)
+│   │   ├── results_*_spark/ # Full Spark writer output
+│   │   ├── analysis_*.json # Analysis metadata
+│   │   └── graphs/         # PNG/HTML visualizations
+│   ├── statistics/         # Statistical summaries
+│   └── failures/           # Error logs and recovery info
+│
+├── docs/                   # Full documentation (primary source)
+│   ├── README.md           # Documentation index
+│   ├── ARCHITECTURE_OVERVIEW.md
+│   ├── Deployment_Guide.md
+│   ├── QUICK_REFERENCE.md
+│   └── ... (more guides)
+│
+├── docker-compose.yml      # Service orchestration (1 master + 3 workers)
+└── requirements.txt        # Python dependencies
+</pre>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Contenu Principal -->
-                <div class="lg:col-span-3 space-y-16">
-                    <!-- Installation -->
-                    <section id="installation" class="doc-section">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-8">Installation</h2>
-                        
-                        <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
-                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Prérequis</h3>
-                            <div class="space-y-3">
-                                <div class="flex items-center">
-                                    <span class="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>
-                                    <span>Python 3.7+</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <span class="w-2 h-2 bg-green-400 rounded-full mr-3"></span>
-                                    <span>Java 8+ (pour Spark)</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <span class="w-2 h-2 bg-purple-400 rounded-full mr-3"></span>
-                                    <span>MPI Library (OpenMPI ou MPICH)</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <span class="w-2 h-2 bg-orange-400 rounded-full mr-3"></span>
-                                    <span>4GB+ RAM recommandé</span>
-                                </div>
+                    <div class="bg-blue-50 border-l-4 border-blue-600 p-4 rounded">
+                        <p class="text-blue-900"><strong>Key Points:</strong> All paths are mounted inside containers at <code>/app/</code>. Data files live in <code>/app/data/input/</code>. Results are written to <code>/app/output/</code> with <code>YYYYmmdd_HHMMSS</code> timestamps to organize runs.</p>
+                    </div>
+                </section>
+
+                <!-- 2. Docker Installation -->
+                <section id="docker-installation" class="section-title bg-white p-8 rounded-lg shadow-md">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900">2. Docker Installation & Setup</h2>
+
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">Prerequisites</h3>
+                            <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                                <li><strong>Docker:</strong> 20.10+ installed</li>
+                                <li><strong>Docker Compose:</strong> 1.29+ installed</li>
+                                <li><strong>Disk Space:</strong> 22 GB (4 images × 5.7 GB each)</li>
+                                <li><strong>RAM:</strong> 8 GB minimum (2 GB per worker + 4 GB master recommended)</li>
+                                <li><strong>CPU:</strong> 4 cores minimum, 8+ recommended</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">Quick Start (5 Minutes)</h3>
+                            <div class="code-block">
+<pre># Navigate to the project directory
+cd Script/
+
+# Start all services (Spark master + 3 workers + Web API)
+docker-compose up -d
+
+# Verify all containers are healthy
+docker-compose ps
+
+# Check Spark Master Web UI
+# http://localhost:8080
+
+# Check Web API health
+curl http://localhost:5000/api/health</pre>
                             </div>
                         </div>
 
-                        <div class="space-y-6">
-                            <div>
-                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Installation avec pip</h3>
-                                <div class="code-block">
-                                    <pre><code># Installation des dépendances principales
-pip install pyspark mpi4py numpy pandas matplotlib plotly
-
-# Installation pour le développement
-pip install jupyter notebook black flake8 pytest
-
-# Installation depuis les sources
-git clone https://github.com/votre-projet/dataparallele.git
-cd dataparallele
-pip install -e .</code></pre>
-                                </div>
-                            </div>
-
-                            <div>
-                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Installation avec conda</h3>
-                                <div class="code-block">
-                                    <pre><code># Création de l'environnement conda
-conda create -n dataparallel python=3.9
-conda activate dataparallel
-
-# Installation des packages
-conda install pyspark mpi4py numpy pandas matplotlib
-conda install -c conda-forge plotly</code></pre>
-                                </div>
-                            </div>
-
-                            <div>
-                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Installation de MPI</h3>
-                                <div class="code-block">
-                                    <pre><code># Sur Ubuntu/Debian
-sudo apt-get update
-sudo apt-get install openmpi-bin openmpi-common libopenmpi-dev
-
-# Sur macOS avec Homebrew
-brew install open-mpi
-
-# Sur CentOS/RHEL
-sudo yum install openmpi openmpi-devel</code></pre>
-                                </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">What Gets Built</h3>
+                            <div class="bg-gray-50 p-4 rounded border border-gray-200">
+                                <table class="w-full text-sm">
+                                    <thead>
+                                        <tr class="border-b">
+                                            <th class="text-left py-2 font-semibold">Service</th>
+                                            <th class="text-left py-2 font-semibold">Base Image</th>
+                                            <th class="text-left py-2 font-semibold">Key Components</th>
+                                            <th class="text-left py-2 font-semibold">Port</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="border-b">
+                                            <td class="py-2"><code>spark-master</code></td>
+                                            <td class="py-2">continuumio/miniconda3</td>
+                                            <td class="py-2">Spark 3.5.0, Java 17, Python 3.10</td>
+                                            <td class="py-2">8080, 7077</td>
+                                        </tr>
+                                        <tr class="border-b">
+                                            <td class="py-2"><code>spark-worker-1,2,3</code></td>
+                                            <td class="py-2">continuumio/miniconda3</td>
+                                            <td class="py-2">Spark 3.5.0, Java 17, Python 3.10</td>
+                                            <td class="py-2">8081-8083</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2"><code>web_api</code></td>
+                                            <td class="py-2">continuumio/miniconda3</td>
+                                            <td class="py-2">Flask, Docker SDK, Python 3.10</td>
+                                            <td class="py-2">5000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                    </section>
+                    </div>
+                </section>
 
-                    <!-- Configuration -->
-                    <section id="configuration" class="doc-section">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-8">Configuration</h2>
-                        
-                        <div class="space-y-8">
-                            <div class="bg-white rounded-xl shadow-lg p-8">
-                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Configuration Spark</h3>
-                                <div class="code-block">
-                                    <pre><code># spark-defaults.conf
-spark.master                     yarn
-spark.submit.deployMode         cluster
-spark.driver.memory             4g
-spark.executor.memory           8g
-spark.executor.cores            4
-spark.executor.instances        10
-spark.sql.adaptive.enabled      true
-spark.sql.adaptive.coalescePartitions.enabled true
-spark.serializer                org.apache.spark.serializer.KryoSerializer</code></pre>
-                                </div>
-                            </div>
+                <!-- 3. Container Dependencies -->
+                <section id="container-dependencies" class="section-title bg-white p-8 rounded-lg shadow-md">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900">3. Container Dependencies & Libraries</h2>
 
-                            <div class="bg-white rounded-xl shadow-lg p-8">
-                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Configuration MPI</h3>
-                                <div class="code-block">
-                                    <pre><code># Configuration de l'environnement MPI
-export MPI_HOME=/usr/local/openmpi
-export PATH=$MPI_HOME/bin:$PATH
-export LD_LIBRARY_PATH=$MPI_HOME/lib:$LD_LIBRARY_PATH
-export MPIEXEC_TIMEOUT=3600
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">Conda Environment (pda)</h3>
+                            <p class="text-gray-700 mb-3">All containers use the same conda environment <code>pda</code> with Python 3.10.19:</p>
+                            <div class="code-block">
+<pre># Core Data Processing
+✓ pyspark 3.5.0
+✓ pandas 2.0.3
+✓ numpy 1.24.3
 
-# Fichier hostfile pour MPI
-# hosts.txt
-node1 slots=4
-node2 slots=4
-node3 slots=4
-node4 slots=4</code></pre>
-                                </div>
-                            </div>
+# Visualization & Graphics
+✓ matplotlib 3.7.0
+✓ seaborn 0.12.0
+✓ plotly 5.15.0
 
-                            <div class="bg-white rounded-xl shadow-lg p-8">
-                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Fichier de Configuration Python</h3>
-                                <div class="code-block">
-                                    <pre><code># config.py
-import os
+# Statistical Analysis
+✓ scipy 1.15.2
+✓ statsmodels 0.14.5
 
-class Config:
-    # Configuration Spark
-    SPARK_MASTER = os.getenv('SPARK_MASTER', 'local[*]')
-    SPARK_APP_NAME = 'DataParallelAnalysis'
-    SPARK_DRIVER_MEMORY = '4g'
-    SPARK_EXECUTOR_MEMORY = '8g'
-    
-    # Configuration MPI
-    MPI_TIMEOUT = 3600
-    MPI_PROCESSES = 4
-    
-    # Configuration générale
-    DATA_DIR = './data'
-    RESULTS_DIR = './results'
-    LOG_LEVEL = 'INFO'
-    
-    # Paramètres de performance
-    CHUNK_SIZE = 10000
-    PARALLEL_WORKERS = 4
-    CACHE_SIZE = '1g'</code></pre>
-                                </div>
+# File Format Support
+✓ pyarrow 12.0.1      (for Parquet)
+✓ fastparquet 2023.7.0 (alternate Parquet)
+
+# Utilities
+✓ PyYAML
+✓ psutil (system monitoring)
+✓ prometheus-client (metrics)</pre>
                             </div>
                         </div>
-                    </section>
 
-                    <!-- Utilisation -->
-                    <section id="utilisation" class="doc-section">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-8">Utilisation</h2>
-                        
-                        <div class="space-y-8">
-                            <div class="bg-white rounded-xl shadow-lg p-8">
-                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Démarrage rapide</h3>
-                                <div class="code-block">
-                                    <pre><code># Import des modules
-from dataparallel import SparkProcessor, MPIProcessor
-from dataparallel.algorithms import MapReduce, DataAggregator
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">System Dependencies</h3>
+                            <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                                <li><strong>Java Runtime:</strong> OpenJDK 17 JRE (required by Spark)</li>
+                                <li><strong>Build Tools:</strong> gcc, g++, make (for compiling Python wheels like numpy)</li>
+                                <li><strong>Development Headers:</strong> python3-dev, libffi-dev (for ctypes, cryptography)</li>
+                            </ul>
+                        </div>
 
-# Initialisation du processeur Spark
-spark_processor = SparkProcessor(
-    app_name="MonAnalyse",
-    master="local[*]",
-    memory="4g"
-)
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">Web API Additional Dependencies</h3>
+                            <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                                <li><strong>Flask:</strong> Lightweight web framework for REST endpoints</li>
+                                <li><strong>Flask-CORS:</strong> Cross-Origin Resource Sharing support for frontend requests</li>
+                                <li><strong>Docker SDK (python):</strong> Allows Web API to spawn and manage job containers</li>
+                            </ul>
+                        </div>
 
-# Initialisation du processeur MPI
-mpi_processor = MPIProcessor(
-    num_processes=4,
-    hostfile="hosts.txt"
-)
+                        <div class="bg-amber-50 border-l-4 border-amber-600 p-4 rounded">
+                            <p class="text-amber-900"><strong>Note:</strong> All dependencies are pre-installed in the Docker images. No additional installation is required when running inside containers.</p>
+                        </div>
+                    </div>
+                </section>
 
-# Chargement des données
-data = spark_processor.load_data("data/mes_donnees.csv")
+                <!-- 4. Spark Configuration -->
+                <section id="spark-config" class="section-title bg-white p-8 rounded-lg shadow-md">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900">4. Spark Configuration</h2>
 
-# Application d'un algorithme MapReduce
-map_reduce = MapReduce(
-    map_func=ma_fonction_map,
-    reduce_func=ma_fonction_reduce
-)
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">Cluster Architecture (docker-compose.yml)</h3>
+                            <div class="code-block">
+<pre># Spark Master
+spark-master:
+  - Role: Driver, scheduler, and web UI
+  - Hostname: spark-master
+  - Port: 7077 (Spark native)
+  - Web UI: 8080 (view cluster status, job history)
+  - App UI: 4040 (during job execution)
 
-result = map_reduce.execute(data)
-result.save("results/output")</code></pre>
-                                </div>
-                            </div>
-
-                            <div class="bg-white rounded-xl shadow-lg p-8">
-                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Interface CLI</h3>
-                                <div class="code-block">
-                                    <pre><code># Installation de l'interface CLI
-pip install dataparallel-cli
-
-# Utilisation de la CLI
-dataparallel --help
-dataparallel process --input data.csv --output results/ --algorithm mapreduce
-dataparallel benchmark --framework spark --dataset large_dataset.parquet
-dataparallel monitor --job-id 12345 --real-time</code></pre>
-                                </div>
+# Spark Workers (3 instances)
+spark-worker-1, spark-worker-2, spark-worker-3:
+  - Role: Task executors
+  - Cores per worker: 2 (SPARK_WORKER_CORES)
+  - Memory per worker: 2G (SPARK_WORKER_MEMORY)
+  - Web UI: 8081, 8082, 8083 (view executor status)
+  - Total cluster capacity: 6 cores, 6 GB memory</pre>
                             </div>
                         </div>
-                    </section>
 
-                    <!-- API Référence -->
-                    <section id="api" class="doc-section">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-8">API Référence</h2>
-                        
-                        <div class="space-y-8">
-                            <div class="bg-white rounded-xl shadow-lg p-8">
-                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Classe SparkProcessor</h3>
-                                <div class="code-block">
-                                    <pre><code>class SparkProcessor:
-    """
-    Processeur de données distribué basé sur Apache Spark.
-    
-    Attributes:
-        spark_session: Session Spark active
-        config: Configuration du processeur
-    """
-    
-    def __init__(self, app_name, master="local[*]", memory="4g", **kwargs):
-        """
-        Initialise un processeur Spark.
-        
-        Args:
-            app_name (str): Nom de l'application
-            master (str): URL du master Spark
-            memory (str): Mémoire allouée
-            **kwargs: Paramètres additionnels
-        """
-        pass
-    
-    def load_data(self, path, format="csv", **options):
-        """
-        Charge des données depuis différentes sources.
-        
-        Args:
-            path (str): Chemin vers les données
-            format (str): Format des données (csv, parquet, json)
-            **options: Options de lecture
-            
-        Returns:
-            DataFrame: Données chargées
-        """
-        pass
-    
-    def execute_query(self, query):
-        """
-        Exécute une requête SQL sur les données.
-        
-        Args:
-            query (str): Requête SQL
-            
-        Returns:
-            DataFrame: Résultats de la requête
-        """
-        pass</code></pre>
-                                </div>
-                            </div>
-
-                            <div class="bg-white rounded-xl shadow-lg p-8">
-                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Classe MapReduce</h3>
-                                <div class="code-block">
-                                    <pre><code>class MapReduce:
-    """
-    Implémentation du paradigme MapReduce.
-    
-    Attributes:
-        map_func: Fonction de mapping
-        reduce_func: Fonction de réduction
-        combiner_func: Fonction combinatrice (optionnelle)
-    """
-    
-    def __init__(self, map_func, reduce_func, combiner_func=None):
-        """
-        Initialise l'algorithme MapReduce.
-        
-        Args:
-            map_func: Fonction map (data_chunk -> list(key, value))
-            reduce_func: Fonction reduce (key, values -> result)
-            combiner_func: Fonction combiner optionnelle
-        """
-        pass
-    
-    def execute(self, data, num_workers=4):
-        """
-        Exécute l'algorithme MapReduce sur les données.
-        
-        Args:
-            data: Données d'entrée
-            num_workers: Nombre de workers parallèles
-            
-        Returns:
-            dict: Résultats agrégés
-        """
-        pass</code></pre>
-                                </div>
-                            </div>
-
-                            <div class="bg-white rounded-xl shadow-lg p-8">
-                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Classe DataAggregator</h3>
-                                <div class="code-block">
-                                    <pre><code>class DataAggregator:
-    """
-    Outils d'agrégation de données parallèles.
-    """
-    
-    @staticmethod
-    def parallel_sum(data, num_workers=4):
-        """Calcule la somme parallèle des données."""
-        pass
-    
-    @staticmethod
-    def parallel_mean(data, num_workers=4):
-        """Calcule la moyenne parallèle des données."""
-        pass
-    
-    @staticmethod
-    def parallel_groupby(data, key_func, agg_func, num_workers=4):
-        """
-        Effectue un groupby parallèle.
-        
-        Args:
-            data: Données d'entrée
-            key_func: Fonction d'extraction de clé
-            agg_func: Fonction d'agrégation
-            num_workers: Nombre de workers
-        """
-        pass</code></pre>
-                                </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">Spark Session Configuration (in main.py)</h3>
+                            <div class="code-block">
+<pre>spark = SparkSession.builder \
+  .appName("Parallel Data Analysis") \
+  .master("spark://spark-master:7077") \
+  .config("spark.executor.cores", "2") \
+  .config("spark.executor.memory", "2g") \
+  .config("spark.driver.memory", "2g") \
+  .config("spark.sql.shuffle.partitions", "200") \
+  .config("spark.default.parallelism", "12") \
+  .getOrCreate()</pre>
                             </div>
                         </div>
-                    </section>
 
-                    <!-- Exemples -->
-                    <section id="exemples" class="doc-section">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-8">Exemples</h2>
-                        
-                        <div class="space-y-8">
-                            <div class="bg-white rounded-xl shadow-lg p-8">
-                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Analyse de Logs Web</h3>
-                                <div class="code-block">
-                                    <pre><code>import re
-from collections import defaultdict
-from dataparallel import SparkProcessor
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">Key Parameters Explained</h3>
+                            <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                                <li><strong>master:</strong> <code>spark://spark-master:7077</code> — connects to cluster master</li>
+                                <li><strong>executor.cores:</strong> CPU cores per executor (tune based on worker capacity)</li>
+                                <li><strong>executor.memory:</strong> Memory per executor (avoid OOM on large datasets)</li>
+                                <li><strong>sql.shuffle.partitions:</strong> Number of shuffle partitions (higher = more parallelism, higher overhead)</li>
+                                <li><strong>default.parallelism:</strong> Partitions for RDD operations</li>
+                            </ul>
+                        </div>
 
-def analyze_web_logs():
-    """Analyse parallèle de logs web."""
-    
-    # Initialisation Spark
-    spark = SparkProcessor("WebLogAnalysis")
-    
-    # Chargement des logs
-    logs = spark.load_data("logs/access.log", format="text")
-    
-    # Extraction des informations
-    def extract_info(line):
-        # Expression régulière pour les logs Apache
-        pattern = r'(\d+\.\d+\.\d+\.\d+) - - \[(.*?)\] "(.*?)" (\d+) (\d+)'
-        match = re.match(pattern, line)
-        if match:
-            ip, timestamp, request, status, size = match.groups()
-            return {
-                'ip': ip,
-                'timestamp': timestamp,
-                'method': request.split()[0],
-                'url': request.split()[1],
-                'status': int(status),
-                'size': int(size) if size != '-' else 0
-            }
-        return None
-    
-    # Transformation des logs
-    parsed_logs = logs.rdd.map(extract_info).filter(lambda x: x is not None)
-    
-    # Analyses
-    # 1. Top 10 des URLs les plus visitées
-    top_urls = (parsed_logs
-                .map(lambda x: (x['url'], 1))
-                .reduceByKey(lambda a, b: a + b)
-                .sortBy(lambda x: x[1], ascending=False)
-                .take(10))
-    
-    # 2. Répartition par code de statut
-    status_dist = (parsed_logs
-                   .map(lambda x: (x['status'], 1))
-                   .reduceByKey(lambda a, b: a + b)
-                   .collect())
-    
-    # 3. Trafic par heure
-    hourly_traffic = (parsed_logs
-                      .map(lambda x: (x['timestamp'][:13], 1))  # Extraction de l'heure
-                      .reduceByKey(lambda a, b: a + b)
-                      .sortByKey()
-                      .collect())
-    
-    return {
-        'top_urls': top_urls,
-        'status_distribution': status_dist,
-        'hourly_traffic': hourly_traffic
-    }
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">Networking</h3>
+                            <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                                <li>All services connected via Docker network <code>spark-network</code></li>
+                                <li>Master discovered at hostname <code>spark-master</code> (resolved internally)</li>
+                                <li>Workers register with master on startup</li>
+                                <li>Host volumes mounted: <code>./src</code>, <code>./data</code>, <code>./output</code> for data sharing</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
 
-# Exécution
-results = analyze_web_logs()
-print("Top 10 URLs:", results['top_urls'])
-print("Status codes:", results['status_distribution'])</code></pre>
-                                </div>
-                            </div>
+                <!-- 5. Application Operation -->
+                <section id="application-operation" class="section-title bg-white p-8 rounded-lg shadow-md">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900">5. How the Application Operates</h2>
 
-                            <div class="bg-white rounded-xl shadow-lg p-8">
-                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Calcul de Statistiques parallèles</h3>
-                                <div class="code-block">
-                                    <pre><code>import numpy as np
-from mpi4py import MPI
-from dataparallel import DataAggregator
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">High-Level Workflow</h3>
+                            <ol class="list-decimal pl-6 text-gray-700 space-y-3">
+                                <li><strong>Entry Point (main.py):</strong> CLI parses arguments (input file, analysis type, master URL)</li>
+                                <li><strong>Initialize SparkSession:</strong> Connects to cluster master on <code>spark://spark-master:7077</code></li>
+                                <li><strong>Load Data (DataLoader):</strong> Reads CSV/JSON/Parquet/Avro from <code>/app/data/input/</code>, infers schema, caches DataFrame</li>
+                                <li><strong>Analyze (DataAnalyzer):</strong> Coordinates job execution via <code>spark_jobs</code> helpers (aggregation, statistics, MapReduce)</li>
+                                <li><strong>Generate Graphs (GraphGenerator):</strong> Samples results, converts to pandas, creates visualizations (PNG/HTML)</li>
+                                <li><strong>Save Results (main.py):</strong> Writes Spark results to disk and persists metadata/JSON summaries</li>
+                                <li><strong>Monitor & Log (PerformanceMonitor, ErrorHandler):</strong> Track timing and handle errors throughout</li>
+                            </ol>
+                        </div>
 
-def parallel_statistics():
-    """Calcul de statistiques descriptives en parallèle."""
-    
-    comm = MPI.COMM_WORLD
-    rank = comm.Get_rank()
-    size = comm.Get_size()
-    
-    # Génération de données aléatoires sur chaque processus
-    np.random.seed(rank)
-    local_data = np.random.normal(100, 15, 10000)
-    
-    # Calcul des statistiques locales
-    local_stats = {
-        'count': len(local_data),
-        'sum': np.sum(local_data),
-        'sum_squares': np.sum(local_data ** 2),
-        'min': np.min(local_data),
-        'max': np.max(local_data)
-    }
-    
-    # Réduction des statistiques
-    global_stats = {}
-    for key, value in local_stats.items():
-        if key in ['min']:
-            global_stats[key] = comm.reduce(value, op=MPI.MIN, root=0)
-        elif key in ['max']:
-            global_stats[key] = comm.reduce(value, op=MPI.MAX, root=0)
-        else:
-            global_stats[key] = comm.reduce(value, op=MPI.SUM, root=0)
-    
-    if rank == 0:
-        # Calcul des statistiques globales
-        n = global_stats['count']
-        mean = global_stats['sum'] / n
-        variance = (global_stats['sum_squares'] / n) - (mean ** 2)
-        std_dev = np.sqrt(variance)
-        
-        return {
-            'count': n,
-            'mean': mean,
-            'std_dev': std_dev,
-            'min': global_stats['min'],
-            'max': global_stats['max']
-        }
-    
-    return None
-
-# Exécution avec MPI
-if __name__ == "__main__":
-    stats = parallel_statistics()
-    if stats:
-        print(f"Statistiques globales: {stats}")</code></pre>
-                                </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">Data Flow (Conceptual Diagram)</h3>
+                            <div class="code-block">
+<pre>Input File (CSV/JSON/Parquet)
+    ↓
+DataLoader.load_data()
+    ↓
+Spark DataFrame (cached)
+    ↓
+    ├─→ DataAnalyzer
+    │   ├─→ spark_jobs.aggregation_job  → Aggregations, cubes, rollups
+    │   ├─→ spark_jobs.statistical_analysis → Stats, correlation, anomaly
+    │   └─→ spark_jobs.mapreduce_job → Word count, group operations
+    │
+    ├─→ Result DataFrame
+    │   ├─→ Spark Writer (Parquet/CSV partitioned) → output/general/results_*_spark/
+    │   └─→ Preview to Pandas (sample) → output/general/results_*.csv
+    │
+    └─→ GraphGenerator
+        ├─→ Sample DataFrame → Pandas
+        └─→ Plot (matplotlib/seaborn/plotly) → output/general/graphs/*.png</pre>
                             </div>
                         </div>
-                    </section>
 
-                    <!-- Dépannage -->
-                    <section id="depannage" class="doc-section">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-8">Dépannage</h2>
-                        
-                        <div class="space-y-6">
-                            <div class="bg-white rounded-xl shadow-lg p-8">
-                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Problèmes Courants</h3>
-                                
-                                <div class="space-y-6">
-                                    <div class="border-l-4 border-red-400 pl-4">
-                                        <h4 class="font-semibold text-gray-900">OutOfMemoryError dans Spark</h4>
-                                        <p class="text-sm text-gray-600 mb-2">Erreur: Java heap space</p>
-                                        <p class="text-sm text-gray-700 mb-2"><strong>Solution:</strong></p>
-                                        <div class="code-block text-sm">
-                                            <pre><code># Augmenter la mémoire allouée
-spark.conf.set("spark.driver.memory", "8g")
-spark.conf.set("spark.executor.memory", "16g")
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">Work Division (How Parallelism Works)</h3>
+                            <div class="bg-gray-50 p-4 rounded border border-gray-200">
+                                <p class="text-gray-700 mb-3"><strong>Spark partitions the data across cluster:</strong></p>
+                                <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                                    <li>Large datasets are automatically partitioned across 3 worker nodes</li>
+                                    <li>Each partition processed in parallel by executor tasks</li>
+                                    <li>Tasks scheduled by Master, executed on Workers</li>
+                                    <li>Shuffle operations (group by, join, etc.) redistribute data as needed</li>
+                                </ul>
+                                <p class="text-gray-700 mt-3"><strong>Example:</strong> A 1 GB CSV with 1M rows might be split into 200 partitions, each processed in parallel across 6 cores (3 workers × 2 cores each).</p>
+                            </div>
+                        </div>
 
-# Activer le spill sur disque
-spark.conf.set("spark.sql.adaptive.enabled", "true")
-spark.conf.set("spark.sql.adaptive.coalescePartitions.enabled", "true")</code></pre>
-                                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">Analysis Types (from CLI: --analysis)</h3>
+                            <table class="w-full text-sm border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="text-left py-2 px-3 border">Type</th>
+                                        <th class="text-left py-2 px-3 border">What It Does</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b">
+                                        <td class="py-2 px-3"><code>statistical</code></td>
+                                        <td class="py-2 px-3">Descriptive stats (mean, std, percentiles), correlation matrix, distributions</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="py-2 px-3"><code>aggregation</code></td>
+                                        <td class="py-2 px-3">Group-by aggregations, cubes, rollups, time-series binning</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="py-2 px-3"><code>mapreduce</code></td>
+                                        <td class="py-2 px-3">MapReduce patterns (word count, moving averages, top N)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 px-3"><code>full</code></td>
+                                        <td class="py-2 px-3">Runs all three analyses in sequence</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">Result Outputs (Timestamped)</h3>
+                            <div class="code-block">
+<pre>output/general/
+├── results_20251205_120000.csv           # Driver-side preview (limited rows)
+├── results_20251205_120000_spark/        # Full Spark output (partitioned)
+│   ├── part-00000-*.csv
+│   ├── part-00001-*.csv
+│   └── ...
+├── analysis_20251205_120000.json         # Metadata & summary
+└── graphs/
+    ├── distribution_20251205_120000.png
+    ├── correlation_20251205_120000.html
+    └── ...</pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. Web API Guide -->
+                <section id="web-api-guide" class="section-title bg-white p-8 rounded-lg shadow-md">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900">6. Web API Reference</h2>
+
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">API Overview</h3>
+                            <p class="text-gray-700 mb-3">The Flask-based Web API (<code>pda-web-api</code>) runs on <code>localhost:5000</code> and exposes the following endpoints:</p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">Core Endpoints</h3>
+                            <div class="space-y-4">
+                                <div class="bg-gray-50 p-4 rounded border border-gray-200">
+                                    <div class="font-mono font-semibold text-blue-600 mb-2">GET /api/health</div>
+                                    <p class="text-gray-700 mb-2"><strong>Purpose:</strong> Health check endpoint. Returns 200 OK if API is running.</p>
+                                    <div class="code-block text-xs">
+<pre>curl http://localhost:5000/api/health
+Response: { "status": "ok" }</pre>
                                     </div>
+                                </div>
 
-                                    <div class="border-l-4 border-yellow-400 pl-4">
-                                        <h4 class="font-semibold text-gray-900">Erreurs de communication MPI</h4>
-                                        <p class="text-sm text-gray-600 mb-2">Erreur: MPI_ERR_COMM</p>
-                                        <p class="text-sm text-gray-700 mb-2"><strong>Solution:</strong></p>
-                                        <div class="code-block text-sm">
-                                            <pre><code># Vérifier l'installation MPI
-mpirun --version
-
-# Tester avec un programme simple
-mpirun -n 4 hostname
-
-# Vérifier le fichier hostfile
-# hosts.txt doit contenir les nœuds accessibles</code></pre>
-                                        </div>
+                                <div class="bg-gray-50 p-4 rounded border border-gray-200">
+                                    <div class="font-mono font-semibold text-blue-600 mb-2">GET /api/hosts</div>
+                                    <p class="text-gray-700 mb-2"><strong>Purpose:</strong> List cluster hosts and web UI URLs.</p>
+                                    <div class="code-block text-xs">
+<pre>curl http://localhost:5000/api/hosts
+Response:
+{
+  "hosts": [
+    {"name": "Spark Master", "url": "http://localhost:8080"},
+    {"name": "Spark App UI", "url": "http://localhost:4040"},
+    {"name": "Worker 1", "url": "http://localhost:8081"},
+    ...
+  ]
+}</pre>
                                     </div>
+                                </div>
 
-                                    <div class="border-l-4 border-blue-400 pl-4">
-                                        <h4 class="font-semibold text-gray-900">Performances médiocres</h4>
-                                        <p class="text-sm text-gray-600 mb-2">Speedup inférieur aux attentes</p>
-                                        <p class="text-sm text-gray-700 mb-2"><strong>Solution:</strong></p>
-                                        <ul class="text-sm text-gray-700 space-y-1">
-                                            <li>• Vérifier le partitionnement des données</li>
-                                            <li>• Optimiser la sérialisation (utiliser Kryo)</li>
-                                            <li>• Surveiller le skew des données</li>
-                                            <li>• Ajuster le nombre de workers</li>
+                                <div class="bg-gray-50 p-4 rounded border border-gray-200">
+                                    <div class="font-mono font-semibold text-blue-600 mb-2">GET /api/input-files</div>
+                                    <p class="text-gray-700 mb-2"><strong>Purpose:</strong> List available input files in <code>/app/data/input/</code>.</p>
+                                    <div class="code-block text-xs">
+<pre>curl http://localhost:5000/api/input-files
+Response:
+{
+  "files": [
+    {"name": "sample_sales.csv", "size": 73000},
+    {"name": "spotify_data clean.csv", "size": 1378000},
+    ...
+  ]
+}</pre>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gray-50 p-4 rounded border border-gray-200">
+                                    <div class="font-mono font-semibold text-blue-600 mb-2">GET /api/results</div>
+                                    <p class="text-gray-700 mb-2"><strong>Purpose:</strong> List generated results (graphs, CSV, analysis JSON).</p>
+                                    <div class="code-block text-xs">
+<pre>curl http://localhost:5000/api/results
+Response:
+{
+  "results": [
+    {"type": "csv", "name": "results_20251205_120000.csv", "path": "..."},
+    {"type": "graph", "name": "distribution_*.png", "path": "..."},
+    ...
+  ]
+}</pre>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gray-50 p-4 rounded border border-gray-200">
+                                    <div class="font-mono font-semibold text-orange-600 mb-2">POST /api/trigger</div>
+                                    <p class="text-gray-700 mb-2"><strong>Purpose:</strong> Trigger a new analysis job. Spawns analysis in background.</p>
+                                    <div class="code-block text-xs">
+<pre>curl -X POST http://localhost:5000/api/trigger \
+  -H "Content-Type: application/json" \
+  -d '{"input_file":"sample_sales.csv","analysis_type":"full"}'
+
+Response:
+{
+  "job_id": "abc-def-123",
+  "status": "queued",
+  "created_at": "2025-12-05T12:00:00Z"
+}</pre>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gray-50 p-4 rounded border border-gray-200">
+                                    <div class="font-mono font-semibold text-blue-600 mb-2">GET /api/jobs</div>
+                                    <p class="text-gray-700 mb-2"><strong>Purpose:</strong> List all jobs (current and historical).</p>
+                                    <div class="code-block text-xs">
+<pre>curl http://localhost:5000/api/jobs
+Response:
+{
+  "jobs": [
+    {"id": "abc-def-123", "status": "running", "progress": 45},
+    {"id": "xyz-123-abc", "status": "completed", "progress": 100},
+    ...
+  ]
+}</pre>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gray-50 p-4 rounded border border-gray-200">
+                                    <div class="font-mono font-semibold text-blue-600 mb-2">GET /api/job/&lt;job_id&gt;</div>
+                                    <p class="text-gray-700 mb-2"><strong>Purpose:</strong> Get detailed status and metadata for a specific job.</p>
+                                    <div class="code-block text-xs">
+<pre>curl http://localhost:5000/api/job/abc-def-123
+Response:
+{
+  "id": "abc-def-123",
+  "status": "running",
+  "progress": 75,
+  "started_at": "2025-12-05T12:00:00Z",
+  "input_file": "sample_sales.csv",
+  "analysis_type": "full"
+}</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-blue-50 border-l-4 border-blue-600 p-4 rounded">
+                            <p class="text-blue-900"><strong>Integration:</strong> The dashboard (<code>dashboard.html</code>) uses these endpoints to display input files, trigger jobs, poll status, and display results. The frontend polls <code>/api/job/&lt;id&gt;</code> every 2 seconds during execution.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 7. Execution Example -->
+                <section id="execution-example" class="section-title bg-white p-8 rounded-lg shadow-md">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900">7. Execution Examples & Results</h2>
+
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">Example: Running Full Analysis via Dashboard</h3>
+                            <ol class="list-decimal pl-6 text-gray-700 space-y-3">
+                                <li>Navigate to <code>http://localhost:8000/dashboard.html</code></li>
+                                <li>Select input file: <code>sample_sales.csv</code></li>
+                                <li>Choose analysis type: <code>full</code></li>
+                                <li>Click "Start Analysis"</li>
+                                <li>Monitor job status in real-time on dashboard</li>
+                                <li>Once complete, view results (graphs, CSV, statistics) in the results panel</li>
+                            </ol>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">Example: Running via Docker Exec</h3>
+                            <div class="code-block">
+<pre># Run statistical analysis on sample_sales.csv
+docker exec spark-master /opt/conda/envs/pda/bin/python \
+  /app/src/main.py \
+  --input /app/data/input/sample_sales.csv \
+  --master spark://spark-master:7077 \
+  --analysis statistical
+
+# Expected output (in container logs):
+# [INFO] Loading data from /app/data/input/sample_sales.csv
+# [INFO] Loaded 1000 rows, 5 columns
+# [INFO] Starting statistical analysis...
+# [INFO] Computing descriptive statistics...
+# [INFO] Computing correlation matrix...
+# [INFO] Saving results to /app/output/general/</pre>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">Sample Results (Execution Summary)</h3>
+                            <div class="bg-gray-50 p-4 rounded border border-gray-200">
+                                <p class="text-gray-700 mb-3"><strong>Test Run: 2025-12-05</strong></p>
+                                <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                                    <li><strong>Input:</strong> sample_sales.csv (71 KB, 1000 rows)</li>
+                                    <li><strong>Analysis:</strong> Full (statistical + aggregation + mapreduce)</li>
+                                    <li><strong>Execution Time:</strong> ~45 seconds</li>
+                                    <li><strong>Partitions:</strong> 4 (auto-partitioned by Spark)</li>
+                                    <li><strong>Output Files Generated:</strong>
+                                        <ul class="list-disc pl-6 mt-2">
+                                            <li>results_20251205_120000.csv (preview)</li>
+                                            <li>results_20251205_120000_spark/ (5 partition files)</li>
+                                            <li>analysis_20251205_120000.json (metadata)</li>
+                                            <li>distribution_20251205_120000.png</li>
+                                            <li>correlation_20251205_120000.html</li>
                                         </ul>
-                                    </div>
-                                </div>
+                                    </li>
+                                </ul>
                             </div>
+                        </div>
 
-                            <div class="bg-white rounded-xl shadow-lg p-8">
-                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Commandes de Diagnostic</h3>
-                                <div class="code-block">
-                                    <pre><code># Monitoring Spark
-spark-submit --master yarn --deploy-mode cluster --status <app_id>
-spark-submit --master yarn --deploy-mode cluster --kill <app_id>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">Generated Artifacts</h3>
+                            <table class="w-full text-sm border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="text-left py-2 px-3 border">File Type</th>
+                                        <th class="text-left py-2 px-3 border">Location</th>
+                                        <th class="text-left py-2 px-3 border">Purpose</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b">
+                                        <td class="py-2 px-3"><code>.csv</code></td>
+                                        <td class="py-2 px-3">output/general/results_*.csv</td>
+                                        <td class="py-2 px-3">Preview (sample rows, 10k max)</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="py-2 px-3"><code>_spark/</code></td>
+                                        <td class="py-2 px-3">output/general/results_*_spark/</td>
+                                        <td class="py-2 px-3">Full results (partitioned by Spark)</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="py-2 px-3"><code>.json</code></td>
+                                        <td class="py-2 px-3">output/general/analysis_*.json</td>
+                                        <td class="py-2 px-3">Analysis metadata & summary</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="py-2 px-3"><code>.png</code></td>
+                                        <td class="py-2 px-3">output/general/graphs/</td>
+                                        <td class="py-2 px-3">Distribution, aggregation charts</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 px-3"><code>.html</code></td>
+                                        <td class="py-2 px-3">output/general/graphs/</td>
+                                        <td class="py-2 px-3">Interactive plots (Plotly)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
 
-# Monitoring MPI
-mpirun -n 4 --tag-output ./mon_programme
-mpirun -n 4 --output-filename logs/output ./mon_programme
+                <!-- 8. Monitoring & Troubleshooting -->
+                <section id="monitoring-troubleshooting" class="section-title bg-white p-8 rounded-lg shadow-md">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900">8. Monitoring & Troubleshooting</h2>
 
-# Monitoring système
-top -p <pid>
-iostat -x 1
-netstat -i
-
-# Logs Spark
-tail -f $SPARK_HOME/logs/*.out
-tail -f $SPARK_HOME/logs/*.log</code></pre>
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">Monitoring Tools</h3>
+                            <div class="space-y-3">
+                                <div class="bg-gray-50 p-4 rounded border border-gray-200">
+                                    <p class="font-semibold text-gray-800">Spark Master Web UI</p>
+                                    <p class="text-gray-700 text-sm">View cluster status, running apps, executors, task details</p>
+                                    <div class="code-block text-xs mt-2">http://localhost:8080</div>
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded border border-gray-200">
+                                    <p class="font-semibold text-gray-800">Spark Application UI</p>
+                                    <p class="text-gray-700 text-sm">Real-time job execution details (available during run)</p>
+                                    <div class="code-block text-xs mt-2">http://localhost:4040</div>
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded border border-gray-200">
+                                    <p class="font-semibold text-gray-800">Worker Web UIs</p>
+                                    <p class="text-gray-700 text-sm">Per-worker executor details and logs</p>
+                                    <div class="code-block text-xs mt-2">http://localhost:8081, 8082, 8083</div>
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded border border-gray-200">
+                                    <p class="font-semibold text-gray-800">Container Logs</p>
+                                    <p class="text-gray-700 text-sm">See container output and errors</p>
+                                    <div class="code-block text-xs mt-2">docker-compose logs -f spark-master
+docker-compose logs -f spark-worker-1</div>
                                 </div>
                             </div>
                         </div>
-                    </section>
-                </div>
-            </div>
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">Common Issues & Solutions</h3>
+                            <div class="space-y-4">
+                                <div class="border-l-4 border-red-500 pl-4 py-2">
+                                    <p class="font-semibold text-gray-900">❌ Containers won't start</p>
+                                    <p class="text-gray-700 text-sm mt-1"><strong>Cause:</strong> Port conflict, insufficient resources</p>
+                                    <p class="text-gray-700 text-sm"><strong>Solution:</strong> Check <code>docker-compose logs</code>, free up ports 8080-8083, ensure 8GB RAM available</p>
+                                </div>
+                                <div class="border-l-4 border-red-500 pl-4 py-2">
+                                    <p class="font-semibold text-gray-900">❌ Web API not responding</p>
+                                    <p class="text-gray-700 text-sm mt-1"><strong>Cause:</strong> Container crashed, Flask not listening</p>
+                                    <p class="text-gray-700 text-sm"><strong>Solution:</strong> <code>docker-compose ps</code> check status, <code>docker-compose logs web_api</code> see errors</p>
+                                </div>
+                                <div class="border-l-4 border-red-500 pl-4 py-2">
+                                    <p class="font-semibold text-gray-900">❌ Python module not found</p>
+                                    <p class="text-gray-700 text-sm mt-1"><strong>Cause:</strong> Using wrong Python binary</p>
+                                    <p class="text-gray-700 text-sm"><strong>Solution:</strong> Always use <code>/opt/conda/envs/pda/bin/python</code> inside containers</p>
+                                </div>
+                                <div class="border-l-4 border-red-500 pl-4 py-2">
+                                    <p class="font-semibold text-gray-900">❌ Jobs timeout or hang</p>
+                                    <p class="text-gray-700 text-sm mt-1"><strong>Cause:</strong> Large dataset, shuffle operations, network latency</p>
+                                    <p class="text-gray-700 text-sm"><strong>Solution:</strong> Check Spark Master UI (8080), increase partition count, reduce sample size in GraphGenerator</p>
+                                </div>
+                                <div class="border-l-4 border-red-500 pl-4 py-2">
+                                    <p class="font-semibold text-gray-900">❌ Results not saved</p>
+                                    <p class="text-gray-700 text-sm mt-1"><strong>Cause:</strong> Output directory permissions, missing mount</p>
+                                    <p class="text-gray-700 text-sm"><strong>Solution:</strong> Verify <code>./output</code> mounted in docker-compose.yml, check job logs for errors</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">Quick Diagnostics Commands</h3>
+                            <div class="code-block">
+<pre># Check all service status
+docker-compose ps
+
+# View master logs (last 100 lines)
+docker-compose logs --tail=100 spark-master
+
+# Get inside a container for debugging
+docker exec -it spark-master bash
+# Then: /opt/conda/envs/pda/bin/python --version
+
+# Verify API is reachable
+curl http://localhost:5000/api/health
+
+# Check disk usage (results saved?)
+docker exec spark-master du -sh /app/output
+
+# Rebuild images (after changes)
+docker-compose build --no-cache</pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Summary / Next Steps -->
+                <section class="bg-gradient-to-r from-blue-50 to-purple-50 p-8 rounded-lg shadow-md border-l-4 border-blue-600">
+                    <h2 class="text-2xl font-bold mb-3 text-gray-900">Quick Reference</h2>
+                    <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                        <li><strong>Start cluster:</strong> <code>cd Script && docker-compose up -d</code></li>
+                        <li><strong>Check health:</strong> <code>curl http://localhost:5000/api/health</code></li>
+                        <li><strong>Run dashboard:</strong> <code>cd "Web site" && python -m http.server 8000</code></li>
+                        <li><strong>View Spark UI:</strong> <code>http://localhost:8080</code></li>
+                        <li><strong>Stop all:</strong> <code>docker-compose down</code></li>
+                    </ul>
+                    <p class="text-sm text-gray-600 mt-4">For complete details, refer to official docs in <code>Script/docs/</code>.</p>
+                </section>
+
+            </article>
         </div>
-    </section>
+    </main>
 
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
                 <h3 class="text-2xl font-bold gradient-text mb-4">DataParallèle</h3>
-                <p class="text-gray-400 mb-4">Projet d'analyse de données parallèle - Documentation technique</p>
-                <p class="text-sm text-gray-500">© 2024 Projet DataParallèle. Tous droits réservés.</p>
+                <p class="text-gray-400 mb-4">Parallel Data Analysis — Technical documentation</p>
+                <p class="text-sm text-gray-500">© 2026 Parallel Data Analysis contributors. Licensed under the <a href="../LICENSE" class="underline">MIT License</a>.</p>
             </div>
         </div>
     </footer>
+    </body>
+</html>
 
     <script>
         // Smooth scrolling pour la navigation

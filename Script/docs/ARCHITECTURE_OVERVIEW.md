@@ -64,7 +64,7 @@ flowchart TD
   D --- M[ErrorHandler]
 ```
 
-If Mermaid is not rendered in your viewer, here's a simple ASCII flow:
+If Mermaid diagrams are not rendered by the current viewer, a simple ASCII flow is provided:
 
 CLI(main.py) -> DataLoader -> Spark DataFrame (cached)
     -> DataAnalyzer -> spark_jobs.* -> Spark DataFrame results
@@ -133,7 +133,7 @@ sequenceDiagram
 
 - Avoid full `DataFrame.toPandas()` on large datasets — the code now samples before converting for plotting and preview.
 - `DataAnalyzer` uses Spark native functions (e.g., `df.stat.corr`) for large-scale correlation; only small datasets are converted to pandas.
-- If you run into dependency/build issues on Windows (numpy/pandas wheels), prefer Conda or run inside the Docker images where prebuilt binaries are available.
+- If dependency or build issues occur on Windows (e.g., numpy/pandas wheels), prefer Conda or run inside the Docker images where prebuilt binaries are available.
 
 **Performance & scaling notes**
 
@@ -162,7 +162,7 @@ sequenceDiagram
 
 ---
 
-This file was generated to help you re-orient with the repo layout and to make it easier to continue refactoring or running tests. If you'd like I can also:
+This file helps orient contributors with the repository layout and supports refactoring and test execution. Suggested additional actions:
 - create a `Script/environment.yml` for conda-based installs;
 - add a `run_smoke.ps1` or `run_smoke.sh` that performs a minimal end-to-end test;
-- or update `README.md` with shortened run instructions.
+- update `README.md` with shortened run instructions.
