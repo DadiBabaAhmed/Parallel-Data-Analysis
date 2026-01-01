@@ -1,29 +1,0 @@
-Setting default log level to "WARN".
-To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
-25/12/04 16:32:55 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
-[Stage 0:>                                                          (0 + 1) / 1]                                                                                [Stage 1:>                                                          (0 + 1) / 1]                                                                                [Stage 2:>                                                          (0 + 1) / 1]                                                                                [Stage 5:>                                                          (0 + 1) / 1]                                                                                [Stage 12:>                                                         (0 + 1) / 1]                                                                                
-============================================================
-Starting Parallel Data Analysis - 20251204_163252
-============================================================
-
-Step 1: Loading data...
-✓ Loaded 1000 records
-
-Step 2: Performing analysis...
-  - Statistical analysis...
-  - Data aggregation...
-  - Correlation analysis...
-
-Step 3: Generating visualizations...
-✓ Graphs saved to output/general/graphs/
-
-Step 4: Saving results...
-✓ Results saved to output/general/results_20251204_163252.csv
-✓ Analysis summary saved to output/general/analysis_20251204_163252.json
-✓ Performance report saved to output/statistics/
-
-============================================================
-Analysis completed successfully!
-Results saved in output/ directory
-============================================================
-

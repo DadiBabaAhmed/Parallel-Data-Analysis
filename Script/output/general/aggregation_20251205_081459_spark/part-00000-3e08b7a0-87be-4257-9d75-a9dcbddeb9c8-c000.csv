@@ -1,3 +1,0 @@
-gender,math score_sum,math score_avg,math score_min,math score_max,math score_count,reading score_sum,reading score_avg,reading score_min,reading score_max,reading score_count,writing score_sum,writing score_avg,writing score_min,writing score_max,writing score_count
-female,32962,63.633204633204635,0,100,518,37611,72.60810810810811,17,100,518,37538,72.46718146718146,10,100,518
-male,33127,68.72821576763485,27,100,482,31558,65.47302904564316,23,100,482,30516,63.31120331950208,15,100,482

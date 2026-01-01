@@ -1,9 +1,0 @@
-{
-  "id": "20251205123545-36b22e5d",
-  "filename": "spotify_data clean.csv",
-  "analysis": "full",
-  "status": "running",
-  "created_at": "2025-12-05T12:35:45.775078Z",
-  "log": "output/jobs/20251205123545-36b22e5d.log",
-  "started_at": "2025-12-05T12:35:45.778841Z"
-}
