@@ -73,14 +73,20 @@ def pytest_sessionfinish(session, exitstatus):
 if __name__ == '__main__':
     # Allow running pytest programmatically
     pytest.main([__file__, '-v', '--tb=short'])
+
+
+class TestRunner:
+    """Small helper used by the top-level suite tests for structured output
+    (kept lightweight so pytest collection doesn't fail)."""
+    def __init__(self):
         self.passed = 0
         self.failed = 0
         self.errors = []
-    
+
     def log(self, message, level="INFO"):
         prefix = f"[{level}]"
         print(f"{prefix} {message}")
-    
+
     def assert_equal(self, actual, expected, message):
         if actual == expected:
             self.log(f"✓ {message}", "PASS")
@@ -90,7 +96,7 @@ if __name__ == '__main__':
             self.log(f"  Expected: {expected}, Got: {actual}", "FAIL")
             self.failed += 1
             self.errors.append(message)
-    
+
     def assert_true(self, condition, message):
         if condition:
             self.log(f"✓ {message}", "PASS")
@@ -99,7 +105,7 @@ if __name__ == '__main__':
             self.log(f"✗ {message}", "FAIL")
             self.failed += 1
             self.errors.append(message)
-    
+
     def print_summary(self):
         total = self.passed + self.failed
         percentage = (self.passed / total * 100) if total > 0 else 0

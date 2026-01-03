@@ -340,20 +340,6 @@ class TestApplicationIntegration:
         finally:
             os.chdir(original_cwd)
 
-    mock_perf_instance = MagicMock()
-    mock_perf.return_value = mock_perf_instance
-
-    mock_error_instance = MagicMock()
-    mock_error.return_value = mock_error_instance
-
-    analyzer = ParallelDataAnalysis("TestApp", master="local[*]")
-    analyzer.run_analysis("dummy.csv", "statistical")
-
-    # Verify that load_data was called
-    mock_loader_instance.load_data.assert_called_once_with("dummy.csv")
-    mock_analyzer_instance.statistical_analysis.assert_called_once()
-
-
 @patch('src.main.SparkSession')
 @patch('src.main.ErrorHandler')
 @patch('src.main.PerformanceMonitor')
